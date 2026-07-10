@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 12s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+/* Custom keyframes and global overrides */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  14% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  28% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  42% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+}
+
+/* Base resets & custom global styles */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: #f3f8fc;
+  color: #0f172a;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Custom UI Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.rotate-y-10 {
+  transform: rotateY(10deg);
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.heartbeat-line {
+  animation: heartbeat 2.5s infinite;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #0a84ff 0%, #2563eb 50%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-shadow-blue {
+  box-shadow: 0 10px 30px -5px rgba(10, 132, 255, 0.3);
+}
+
+.glow-shadow-pink {
+  box-shadow: 0 10px 30px -5px rgba(236, 72, 153, 0.3);
+}
+
+.glow-shadow-emerald {
+  box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.3);
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 3D tilt hover effects */
+.hover-3d-card {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+.hover-3d-card:hover {
+  transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
+  box-shadow: 0 20px 40px rgba(10, 132, 255, 0.12);
+}
+
+/* Grid Layout Custom */
+.masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 1.5rem;
+}

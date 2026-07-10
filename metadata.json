@@ -1,0 +1,6 @@
+{
+  "name": "Nilaya Urostone & Gynae-IVF Hospital",
+  "description": "An ultra-premium, modern 3D healthcare platform offering advanced urology, laparoscopic surgery, gynecology, and IVF treatments in Begusarai, Bihar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
