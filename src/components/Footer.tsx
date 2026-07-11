@@ -33,7 +33,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <div>
                 <span className="font-extrabold text-base leading-none block tracking-tight">NILAYA</span>
                 <span className="text-[9px] uppercase tracking-widest font-bold text-blue-400 block mt-0.5">
-                  Urostone & IVF Hospital
+                  Urostone & Gyane IVF Hospital
                 </span>
               </div>
             </div>

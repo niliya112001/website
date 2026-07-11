@@ -1,11 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { GALLERY } from '../data';
 import { GalleryItem } from '../types';
 import { Play, Image as ImageIcon, Video as VideoIcon, X, Eye, Film, Layers } from 'lucide-react';
+import { HOSPITAL_FACILITY_PHOTOS, ADVANCED_EQUIPMENT_PHOTOS } from '../assets/images';
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'facility' | 'equipment' | 'video'>('all');
   const [activeMedia, setActiveMedia] = useState<GalleryItem | null>(null);
+
+  // Memoize collage images, excluding the currently active lightbox image
+  const collageImages = useMemo(() => {
+    let photos = [...HOSPITAL_FACILITY_PHOTOS, ...ADVANCED_EQUIPMENT_PHOTOS];
+    
+    if (activeMedia && activeMedia.type === 'image') {
+      photos = photos.filter(url => url !== activeMedia.url);
+    }
+
+    if (photos.length < 4) return [];
+
+    // Use up to 20 images for the background collage
+    const list = photos.slice(0, 20);
+
+    return list.map((src, index) => {
+      // Deterministic offsets and rotations based on index
+      const seed = Math.sin(index + 1);
+      const rotation = (seed * 5).toFixed(1); // -5deg to +5deg
+      const offsetX = (Math.cos(index + 1) * 15).toFixed(0); // -15px to +15px
+      const offsetY = (Math.sin(index * 2) * 15).toFixed(0); // -15px to +15px
+
+      return {
+        src,
+        style: {
+          transform: `rotate(${rotation}deg) translate(${offsetX}px, ${offsetY}px)`,
+        }
+      };
+    });
+  }, [activeMedia]);
 
   const filteredItems = GALLERY.filter(item => {
     if (activeFilter === 'all') return true;
@@ -15,9 +45,35 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
-      className="py-12 bg-gradient-to-tr from-slate-50 via-slate-100 to-blue-50/10"
+      className="relative py-12 bg-gradient-to-tr from-slate-50 via-slate-100 to-blue-50/10 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 1. Dynamic Background Collage Layer (z-0) */}
+      {collageImages.length >= 4 && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-8 w-full h-full opacity-[0.11] blur-[2px]">
+            {collageImages.map((img, idx) => (
+              <div
+                key={idx}
+                className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-white/40"
+                style={img.style}
+              >
+                <img
+                  src={img.src}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 2. Soft white/blue gradient overlay (z-1) */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-slate-50/90 via-slate-100/90 to-blue-50/90 z-[1] pointer-events-none select-none"></div>
+
+      {/* 3. Content layer (z-2) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-[2]">
         
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-8">

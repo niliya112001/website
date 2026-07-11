@@ -138,3 +138,43 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 1.5rem;
 }
+
+/* Premium Medical Dashboard Animations */
+@keyframes ecg-dash {
+  0% {
+    stroke-dashoffset: 800;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ecg-path {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 800;
+  animation: ecg-dash 3.5s linear infinite;
+}
+
+@keyframes card-breath {
+  0%, 100% {
+    transform: translateY(0px) rotateY(6deg) rotateX(6deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateY(4deg) rotateX(4deg);
+  }
+}
+
+.animate-breath {
+  transform-style: preserve-3d;
+  animation: card-breath 6s ease-in-out infinite;
+}
+
+.translate-z-10 {
+  transform: translateZ(10px);
+}
+.translate-z-20 {
+  transform: translateZ(20px);
+}
+.translate-z-30 {
+  transform: translateZ(30px);
+}
