@@ -23,7 +23,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <img
                   src={LOGO_SRC}
                   alt={HOSPITAL_INFO.shortName}
-                  className="h-10 w-10 object-contain rounded-xl brightness-0 invert"
+                  className="h-10 w-10 object-contain rounded-xl"
                 />
               ) : (
                 <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">

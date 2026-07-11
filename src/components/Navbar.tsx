@@ -39,19 +39,33 @@ export default function Navbar({ onNavigate, onOpenAppointment, activeSection }:
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo Brand */}
           <div
             id="nav-brand"
-            className="flex items-center cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer group"
             onClick={() => handleLinkClick('home')}
           >
             <img
               src={LOGO_SRC}
               alt="Nilaya Urostone & Gynae-IVF Hospital"
-              className={`h-11 w-auto transition-all duration-300 ${
-                isScrolled ? 'brightness-0 invert' : ''
-              }`}
+              className="h-12 sm:h-14 w-auto transition-all duration-300"
             />
+            <div className="flex flex-col justify-center leading-tight">
+              <span className={`font-extrabold text-xs sm:text-sm md:text-base tracking-tight transition-colors duration-300 ${
+                isScrolled ? 'text-white' : 'text-[#173A8A]'
+              }`}>
+                NILAYA UROSTONE
+              </span>
+              <span className={`font-bold text-[10px] sm:text-xs tracking-tight transition-colors duration-300 ${
+                isScrolled ? 'text-rose-400' : 'text-[#E53935]'
+              }`}>
+                & GYNAE-IVF HOSPITAL
+              </span>
+              <span className={`hidden md:inline font-medium text-[9px] tracking-wide transition-colors duration-300 ${
+                isScrolled ? 'text-slate-300' : 'text-slate-500'
+              }`}>
+                Compassionate Care • Advanced Technology • Better Outcomes
+              </span>
+            </div>
           </div>
 
           {/* Desktop Navigation */}

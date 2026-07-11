@@ -187,20 +187,13 @@ export const SERVICES: MedicalService[] = [
   },
   {
     id: 'modular-ot',
-    title: 'Modular Operation Theatre',
+    title: 'Semi-Modular Operation Theatre',
     description: 'Laminar air flows, HEPA filters, and high-definition laparoscopic towers to minimize postoperative infections and ensure safety.',
     icon: 'Layers',
     tag: 'Surgical Safety',
     image: SERVICE_IMAGES.modularOt
   },
-  {
-    id: 'pathology',
-    title: 'In-House Pathology Lab',
-    description: 'Comprehensive, fully-automated hematology, biochemistry, and hormone analysis with digital reports sent straight to your phone.',
-    icon: 'Thermometer',
-    tag: '24 Hours',
-    image: SERVICE_IMAGES.pathology
-  },
+  
   {
     id: 'cashless',
     title: 'Cashless TPA Insurance',
