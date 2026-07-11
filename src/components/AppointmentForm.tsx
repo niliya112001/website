@@ -85,11 +85,11 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
   // Handle department change to auto-fill the correct chief doctor!
   const handleDeptChange = (deptId: string) => {
     let autoDoc = '';
-    if (deptId === 'urology') autoDoc = 'Dr. Kislay Atharv';
+    if (deptId === 'urology') autoDoc = 'Dr. Kishlaya Atharwa';
     if (deptId === 'gynae-ivf') autoDoc = 'Dr. Nisha Kumari';
     if (deptId === 'laparoscopy') {
       // Both can do laparoscopic surgery, let's keep it open or suggest the female doctor for gynae, male for urology
-      autoDoc = 'Dr. Kislay Atharv';
+      autoDoc = 'Dr. Kishlaya Atharwa';
     }
 
     setFormData(prev => ({

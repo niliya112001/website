@@ -30,7 +30,7 @@ export const HOSPITAL_INFO = {
 export const DOCTORS: Doctor[] = [
   {
     id: 'dr-kislay-atharv',
-    name: 'Dr. Kislay Atharv',
+    name: 'Dr. Kishlaya Atharwa',
     hindiName: 'डॉ. किसलय अथर्व',
     title: 'Laparoscopic Surgeon & Urologist',
     qualifications: [
@@ -78,7 +78,7 @@ export const DOCTORS: Doctor[] = [
 
 export const DIRECTORS = [
   {
-    name: 'Dr. Kislay Atharv',
+    name: 'Dr. Kishlaya Atharwa',
     designation: 'Managing Director & Chief Urologist',
     message: 'At Nilaya Hospital, our mission is to deliver world-class super-specialty healthcare to the people of Begusarai and Bihar. By pairing state-of-the-art medical technology with highly precise surgical techniques, we ensure our patients receive treatment on par with major metro hospitals, combined with home-like compassion and affordability.',
     signature: 'Dr. K. Atharv',
@@ -279,7 +279,7 @@ export const UPDATES: UpdateItem[] = [
     title: 'Successful Removal of 22mm Staghorn Kidney Stone via Laser',
     date: 'June 28, 2026',
     category: 'achievement',
-    description: 'Dr. Kislay Atharv successfully performed a sutureless Laser RIRS procedure to crush a complex 22mm staghorn calculus in a 58-year-old patient, who was discharged within 24 hours.',
+    description: 'Dr. Kishlaya Atharwa successfully performed a sutureless Laser RIRS procedure to crush a complex 22mm staghorn calculus in a 58-year-old patient, who was discharged within 24 hours.',
     tag: 'Surgical Success'
   },
   {

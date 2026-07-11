@@ -92,7 +92,7 @@ export function getDoctorPhoto(index: number): string {
   if (DOCTOR_PHOTOS[index]) {
     return DOCTOR_PHOTOS[index];
   }
-  // Return premium AI-generated portraits for Kislay Atharv (index 0) and Nisha Kumari (index 1)
+  // Return premium AI-generated portraits for Kishlaya Atharwa (index 0) and Nisha Kumari (index 1)
   return index === 0
     ? doctorMalePlaceholder
     : index === 1
