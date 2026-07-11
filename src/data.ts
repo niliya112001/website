@@ -7,7 +7,7 @@ export const HOSPITAL_INFO = {
   address: 'NH-31, Khatopur, Infront of Puja Gas Agency, Begusarai, Bihar',
   phone: '9234633557',
   emergencyPhone: '9234633557',
-  email: 'info@nilayahospital.com',
+  email: 'nilaya112001@gmail.com',
   workingHours: '24 Hours Emergency | OPD: 10:00 AM - 6:00 PM (Mon - Sat)',
   locationCoords: {
     lat: 25.4334,
