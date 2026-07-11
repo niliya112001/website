@@ -9,10 +9,32 @@
  *   src/assets/icons/      → icon images keyed by filename (sorted)
  *
  * Supported formats: .png, .jpg, .jpeg, .webp, .svg (case-insensitive)
- * Missing images fall back to an inline SVG placeholder.
+ * Missing images fall back to premium AI-generated placeholders or inline SVG.
  */
 
-/* ─── Placeholder ───────────────────────────────────────────────────────── */
+/* ─── Premium AI Placeholders (imported locally) ───────────────────────── */
+
+import heroBgPlaceholder from './placeholders/hero_bg_placeholder.png';
+import doctorMalePlaceholder from './placeholders/doctor_male_placeholder.png';
+import doctorFemalePlaceholder from './placeholders/doctor_female_placeholder.png';
+import facilityReceptionPlaceholder from './placeholders/facility_reception_placeholder.png';
+import facilityOtPlaceholder from './placeholders/facility_ot_placeholder.png';
+import equipmentDiagnosticsPlaceholder from './placeholders/equipment_diagnostics_placeholder.png';
+import equipmentIvfPlaceholder from './placeholders/equipment_ivf_placeholder.png';
+import buildingExteriorPlaceholder from './placeholders/building_exterior_placeholder.png';
+
+export {
+  heroBgPlaceholder,
+  doctorMalePlaceholder,
+  doctorFemalePlaceholder,
+  facilityReceptionPlaceholder,
+  facilityOtPlaceholder,
+  equipmentDiagnosticsPlaceholder,
+  equipmentIvfPlaceholder,
+  buildingExteriorPlaceholder,
+};
+
+/* ─── Placeholder SVG ───────────────────────────────────────────────────── */
 
 export const PLACEHOLDER_SVG =
   `data:image/svg+xml,${encodeURIComponent(
@@ -65,9 +87,17 @@ const doctorModules = import.meta.glob<{ default: string }>(
 /** All doctor photos, sorted alphabetically by filename */
 export const DOCTOR_PHOTOS: string[] = resolveGlob(doctorModules);
 
-/** Return the photo at `index`, or the placeholder if the index is out of range. */
+/** Return the photo at `index`, or the premium AI placeholder, or the inline SVG. */
 export function getDoctorPhoto(index: number): string {
-  return DOCTOR_PHOTOS[index] ?? PLACEHOLDER_SVG;
+  if (DOCTOR_PHOTOS[index]) {
+    return DOCTOR_PHOTOS[index];
+  }
+  // Return premium AI-generated portraits for Kislay Atharv (index 0) and Nisha Kumari (index 1)
+  return index === 0
+    ? doctorMalePlaceholder
+    : index === 1
+    ? doctorFemalePlaceholder
+    : PLACEHOLDER_SVG;
 }
 
 /* ─── Gallery Photos ────────────────────────────────────────────────────── */
@@ -102,17 +132,24 @@ export const VIDEO_THUMBNAIL_FILENAMES: string[] = Object.keys(videoThumbnailMod
   .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
   .map(filenameFromKey);
 
-/* ─── Hero Background ──────────────────────────────────────────────────── */
+/** Return the gallery photo at `index`, or the placeholder if out of range. */
+export function getGalleryPhoto(index: number): string {
+  const allPhotos = [...HOSPITAL_FACILITY_PHOTOS, ...ADVANCED_EQUIPMENT_PHOTOS];
+  return allPhotos[index] ?? PLACEHOLDER_SVG;
+}
+
+/* ─── Hero Backgrounds ──────────────────────────────────────────────────── */
 
 const heroModules = import.meta.glob<{ default: string }>(
-  './hero/*.{png,jpg,jpeg,webp,svg,PNG,JPG,JPEG,WEBP,SVG}',
+  './hero/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,WEBP}',
   { eager: true },
 );
 
-const heroEntries = resolveGlob(heroModules);
+/** All hero background images, sorted alphabetically */
+export const HERO_BGS: string[] = resolveGlob(heroModules);
 
-/** First hero image found, or `undefined` (keep existing design) */
-export const HERO_BG: string | undefined = heroEntries[0];
+/** First hero background image found, or undefined */
+export const HERO_BG: string | undefined = HERO_BGS[0];
 
 /* ─── Icons ─────────────────────────────────────────────────────────────── */
 
@@ -137,23 +174,52 @@ export function getIcon(name: string): string | undefined {
 /* ─── Department / Service / About images ───────────────────────────────── */
 /*
  * These sections use local icons when available (matched by filename key).
- * If no local icon matches, the PLACEHOLDER_SVG is used.
+ * If no local icon matches, a premium AI illustration placeholder is used.
  * No external CDN / Unsplash URLs.
  */
 
-const DEPARTMENT_KEYS = ['urology', 'gynaeIvf', 'laparoscopy', 'diagnostics'] as const;
-const SERVICE_KEYS = ['emergency', 'laserUrology', 'ivfLab', 'modularOt', 'pathology', 'cashless'] as const;
-const ABOUT_KEYS = ['hospitalBuilding'] as const;
+const DEPARTMENT_PLACEHOLDERS: Record<string, string> = {
+  urology: facilityOtPlaceholder,
+  gynaeIvf: equipmentIvfPlaceholder,
+  laparoscopy: facilityOtPlaceholder,
+  diagnostics: equipmentDiagnosticsPlaceholder,
+};
 
-/** Use local icon if available, otherwise fall back to placeholder */
-function buildImageMap(keys: readonly string[]): Record<string, string> {
+const SERVICE_PLACEHOLDERS: Record<string, string> = {
+  emergency: facilityReceptionPlaceholder,
+  laserUrology: facilityOtPlaceholder,
+  ivfLab: equipmentIvfPlaceholder,
+  modularOt: facilityOtPlaceholder,
+  pathology: equipmentDiagnosticsPlaceholder,
+  cashless: facilityReceptionPlaceholder,
+};
+
+const ABOUT_PLACEHOLDERS: Record<string, string> = {
+  hospitalBuilding: buildingExteriorPlaceholder,
+};
+
+function buildImageMapWithAiFallbacks(
+  keys: readonly string[],
+  placeholders: Record<string, string>,
+): Record<string, string> {
   const result: Record<string, string> = {};
   for (const key of keys) {
-    result[key] = ICON_IMAGES[key] ?? PLACEHOLDER_SVG;
+    result[key] = ICON_IMAGES[key] ?? placeholders[key] ?? PLACEHOLDER_SVG;
   }
   return result;
 }
 
-export const DEPARTMENT_IMAGES: Record<string, string> = buildImageMap(DEPARTMENT_KEYS);
-export const SERVICE_IMAGES: Record<string, string> = buildImageMap(SERVICE_KEYS);
-export const ABOUT_IMAGES: Record<string, string> = buildImageMap(ABOUT_KEYS);
+export const DEPARTMENT_IMAGES: Record<string, string> = buildImageMapWithAiFallbacks(
+  ['urology', 'gynaeIvf', 'laparoscopy', 'diagnostics'],
+  DEPARTMENT_PLACEHOLDERS,
+);
+
+export const SERVICE_IMAGES: Record<string, string> = buildImageMapWithAiFallbacks(
+  ['emergency', 'laserUrology', 'ivfLab', 'modularOt', 'pathology', 'cashless'],
+  SERVICE_PLACEHOLDERS,
+);
+
+export const ABOUT_IMAGES: Record<string, string> = buildImageMapWithAiFallbacks(
+  ['hospitalBuilding'],
+  ABOUT_PLACEHOLDERS,
+);

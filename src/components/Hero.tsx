@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldCheck, HeartPulse, Activity, Sparkles, PhoneCall, CalendarRange } from 'lucide-react';
+import { ShieldCheck, HeartPulse, Activity, Sparkles, PhoneCall, CalendarRange, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HOSPITAL_INFO } from '../data';
-import { LOGO_SRC, HERO_BG } from '../assets/images';
+import { LOGO_SRC, HERO_BGS, heroBgPlaceholder } from '../assets/images';
 
 interface HeroProps {
   onOpenAppointment: () => void;
@@ -10,6 +10,49 @@ interface HeroProps {
 
 export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
   const [stats, setStats] = useState({ years: 0, patients: 0, doctors: 0, beds: 0 });
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Preload background slider images for smooth transitions
+  useEffect(() => {
+    HERO_BGS.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  // Autoplay slider logic with tab visibility suspension
+  useEffect(() => {
+    if (HERO_BGS.length <= 1) return;
+
+    let intervalId: any;
+    let isTabActive = true;
+
+    const startAutoplay = () => {
+      intervalId = setInterval(() => {
+        if (isTabActive) {
+          setCurrentImageIndex((prev) => (prev + 1) % HERO_BGS.length);
+        }
+      }, 5000);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        isTabActive = false;
+        clearInterval(intervalId);
+      } else {
+        isTabActive = true;
+        startAutoplay();
+      }
+    };
+
+    startAutoplay();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   useEffect(() => {
     const duration = 2000;
@@ -36,34 +79,77 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
     return () => clearInterval(timer);
   }, []);
 
+  const sliderImages = HERO_BGS.length > 0 ? HERO_BGS : [heroBgPlaceholder];
+
   return (
     <section
       id="home"
-      className="relative pt-24 pb-12 flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50"
+      className="relative pt-24 pb-12 flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50 group"
     >
-      {/* Optional Hero Background Image — auto-detected from src/assets/hero/ */}
-      {HERO_BG && (
-        <div className="absolute inset-0 z-0">
+      {/* 1. Dynamic Background Image Slider (Layer 0 - Bottom) */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
+        {sliderImages.map((src, index) => (
           <img
-            src={HERO_BG}
+            key={src}
+            src={src}
             alt=""
             aria-hidden="true"
-            className="w-full h-full object-cover"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1500 ease-in-out ${
+              index === currentImageIndex ? 'opacity-100 z-[1]' : 'opacity-0 z-0'
+            }`}
+            loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-blue-50/85 to-indigo-50/90"></div>
-        </div>
-      )}
+        ))}
+      </div>
 
-      {/* Background Logo — subtle branding watermark */}
-      <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
+      {/* 2. Soft white/blue gradient overlay (Layer 1) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-blue-50/85 to-indigo-50/90 z-[2] pointer-events-none select-none"></div>
+
+      {/* 3. Center aligned large logo watermark (Layer 2) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-[3]">
         <img
           src={LOGO_SRC}
           alt=""
           aria-hidden="true"
-          className="w-[600px] h-[600px] max-w-[80vw] max-h-[80vh] object-contain opacity-[0.07] blur-[2px]"
+          className="w-[280px] h-[280px] sm:w-[580px] sm:h-[580px] lg:w-[800px] lg:h-[800px] object-contain opacity-[0.09] blur-[1px]"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/80"></div>
       </div>
+
+      {/* 4. Previous and Next arrows on hover (Layer 3) */}
+      {sliderImages.length > 1 && (
+        <>
+          <button
+            onClick={() => setCurrentImageIndex((prev) => (prev - 1 + sliderImages.length) % sliderImages.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-[10] p-3 rounded-full bg-white/40 hover:bg-white/70 text-slate-800 transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => setCurrentImageIndex((prev) => (prev + 1) % sliderImages.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-[10] p-3 rounded-full bg-white/40 hover:bg-white/70 text-slate-800 transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </>
+      )}
+
+      {/* 5. Slider indicators (Layer 3) */}
+      {sliderImages.length > 1 && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-[10]">
+          {sliderImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
+                index === currentImageIndex ? 'bg-blue-600 w-6' : 'bg-slate-400/50 hover:bg-slate-600'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Dynamic Lighting & Gradient Blobs */}
       <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-blue-400/25 rounded-full filter blur-3xl animate-pulse-slow"></div>
