@@ -162,45 +162,76 @@ export const DEPARTMENTS: Department[] = [
 
 export const SERVICES: MedicalService[] = [
   {
-    id: 'emergency',
-    title: '24/7 Trauma & Emergency',
-    description: 'Equipped to handle acute urological conditions, emergency cesareans, appendicitis, and critical trauma cases with round-the-clock specialists.',
+    id: 'advanced-urology',
+    title: 'Advanced Urology',
+    description: 'Comprehensive management of prostate disorders, urinary infections, reconstructive urology, and male infertility issues by senior urosurgeons.',
+    icon: 'Stethoscope',
+    tag: 'Specialty Care',
+    image: SERVICE_IMAGES.advancedUrology
+  },
+  {
+    id: 'laser-treatments',
+    title: 'Holmium Laser Stone Removal & Laser Treatments',
+    description: 'Advanced laser-based treatment for kidney stones and various urological conditions using modern Holmium Laser technology. ',
+    icon: 'Sparkles',
+    tag: 'Laser Tech',
+    image: SERVICE_IMAGES.laserTreatments
+  },
+  {
+    id: 'laparoscopic-surgery',
+    title: 'Laparoscopic Surgery',
+    description: 'Minimally invasive keyhole surgeries for appendix, gallbladder stones, hernia, and gynae conditions, ensuring faster post-op recovery.',
+    icon: 'Layers',
+    tag: 'Keyhole Surgery',
+    image: SERVICE_IMAGES.laparoscopicSurgery
+  },
+  {
+    id: 'ivf-fertility',
+    title: 'IVF & Fertility Care',
+    description: 'Comprehensive reproductive solutions including IVF, ICSI, IUI, and high-success embryology lab cleanroom setup.',
+    icon: 'Heart',
+    tag: 'Success Oriented',
+    image: SERVICE_IMAGES.ivfFertility
+  },
+  {
+    id: 'pregnancy-care',
+    title: 'Advanced Pre & Post Pregnancy Care',
+    description: 'Dedicated clinical care, fetal development tracking, high-risk pregnancy management, and compassionate postpartum support.',
+    icon: 'Baby',
+    tag: 'Obstetrics',
+    image: SERVICE_IMAGES.pregnancyCare
+  },
+  {
+    id: 'normal-delivery',
+    title: 'Normal Delivery',
+    description: 'Painless and natural delivery services under the supervision of highly experienced obstetricians and supportive maternity staff.',
+    icon: 'HeartPulse',
+    tag: 'Maternity',
+    image: SERVICE_IMAGES.normalDelivery
+  },
+  {
+    id: 'c-section',
+    title: 'Caesarean Section (C-Section)',
+    description: 'Planned and emergency Caesarean section deliveries performed in sterile modular OTs to ensure maximum maternal and fetal safety.',
+    icon: 'Activity',
+    tag: 'Surgical Birth',
+    image: SERVICE_IMAGES.cSection
+  },
+  {
+    id: 'diagnostics-imaging',
+    title: 'Diagnostics & Imaging',
+    description: 'Fully automated pathology laboratory, digital high-frequency X-Rays, and high-resolution 3D/4D ultrasound Doppler scans.',
+    icon: 'Thermometer',
+    tag: '24 Hours',
+    image: SERVICE_IMAGES.diagnosticsImaging
+  },
+  {
+    id: 'emergency-care',
+    title: 'Emergency Care',
+    description: 'Round-the-clock emergency medical response and critical trauma services staffed by senior super-specialty consultants.',
     icon: 'Flame',
     tag: 'Emergency',
-    image: SERVICE_IMAGES.emergency
-  },
-  {
-    id: 'laser-urology',
-    title: 'Holmium Laser Stone Removal',
-    description: 'State-of-the-art Holmium Laser for completely sutureless, painless, and rapid dissolution of kidney and ureteral stones.',
-    icon: 'Sparkles',
-    tag: 'Advanced Tech',
-    image: SERVICE_IMAGES.laserUrology
-  },
-  {
-    id: 'ivf-lab',
-    title: 'Advanced IVF Cleanroom Lab',
-    description: 'Heads-up incubator systems, highly filtered cleanrooms, and computerized embryo tracking to achieve maximum success rates.',
-    icon: 'FlameKindling',
-    tag: 'Success Oriented',
-    image: SERVICE_IMAGES.ivfLab
-  },
-  {
-    id: 'modular-ot',
-    title: 'Semi-Modular Operation Theatre',
-    description: 'Laminar air flows, HEPA filters, and high-definition laparoscopic towers to minimize postoperative infections and ensure safety.',
-    icon: 'Layers',
-    tag: 'Surgical Safety',
-    image: SERVICE_IMAGES.modularOt
-  },
-  
-  {
-    id: 'cashless',
-    title: 'Cashless TPA Insurance',
-    description: 'Empaneled with major government and private insurance networks (TPA) for seamless cashless treatment.',
-    icon: 'CreditCard',
-    tag: 'Financial Comfort',
-    image: SERVICE_IMAGES.cashless
+    image: SERVICE_IMAGES.emergencyCare
   }
 ];
 

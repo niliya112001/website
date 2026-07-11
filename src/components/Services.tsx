@@ -1,6 +1,6 @@
 import React from 'react';
 import { SERVICES } from '../data';
-import { Flame, Sparkles, Layers, Thermometer, CreditCard, FlameKindling, ShieldCheck, Heart } from 'lucide-react';
+import { Flame, Sparkles, Layers, Thermometer, CreditCard, FlameKindling, ShieldCheck, Heart, Stethoscope, Baby, Zap, HeartPulse, Activity } from 'lucide-react';
 
 interface ServicesProps {
   onNavigate: (sectionId: string) => void;
@@ -19,6 +19,18 @@ export default function Services({ onNavigate }: ServicesProps) {
         return <Layers className="w-5 h-5 text-blue-500" />;
       case 'Thermometer':
         return <Thermometer className="w-5 h-5 text-indigo-500" />;
+      case 'Stethoscope':
+        return <Stethoscope className="w-5 h-5 text-blue-600" />;
+      case 'Baby':
+        return <Baby className="w-5 h-5 text-pink-500" />;
+      case 'Zap':
+        return <Zap className="w-5 h-5 text-amber-500 animate-pulse" />;
+      case 'HeartPulse':
+        return <HeartPulse className="w-5 h-5 text-rose-500 animate-pulse-slow" />;
+      case 'Activity':
+        return <Activity className="w-5 h-5 text-emerald-500" />;
+      case 'Heart':
+        return <Heart className="w-5 h-5 text-pink-500 animate-pulse-slow" />;
       default:
         return <CreditCard className="w-5 h-5 text-emerald-500" />;
     }

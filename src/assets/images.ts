@@ -186,12 +186,16 @@ const DEPARTMENT_PLACEHOLDERS: Record<string, string> = {
 };
 
 const SERVICE_PLACEHOLDERS: Record<string, string> = {
-  emergency: facilityReceptionPlaceholder,
-  laserUrology: facilityOtPlaceholder,
-  ivfLab: equipmentIvfPlaceholder,
-  modularOt: facilityOtPlaceholder,
-  pathology: equipmentDiagnosticsPlaceholder,
-  cashless: facilityReceptionPlaceholder,
+  advancedUrology: facilityOtPlaceholder,
+  holmiumLaser: facilityOtPlaceholder,
+  laserTreatments: facilityOtPlaceholder,
+  laparoscopicSurgery: facilityOtPlaceholder,
+  ivfFertility: equipmentIvfPlaceholder,
+  pregnancyCare: equipmentIvfPlaceholder,
+  normalDelivery: facilityReceptionPlaceholder,
+  cSection: facilityOtPlaceholder,
+  diagnosticsImaging: equipmentDiagnosticsPlaceholder,
+  emergencyCare: facilityReceptionPlaceholder,
 };
 
 const ABOUT_PLACEHOLDERS: Record<string, string> = {
@@ -215,7 +219,18 @@ export const DEPARTMENT_IMAGES: Record<string, string> = buildImageMapWithAiFall
 );
 
 export const SERVICE_IMAGES: Record<string, string> = buildImageMapWithAiFallbacks(
-  ['emergency', 'laserUrology', 'ivfLab', 'modularOt', 'pathology', 'cashless'],
+  [
+    'advancedUrology',
+    'holmiumLaser',
+    'laserTreatments',
+    'laparoscopicSurgery',
+    'ivfFertility',
+    'pregnancyCare',
+    'normalDelivery',
+    'cSection',
+    'diagnosticsImaging',
+    'emergencyCare',
+  ],
   SERVICE_PLACEHOLDERS,
 );
 
