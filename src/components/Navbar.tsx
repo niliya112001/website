@@ -4,10 +4,11 @@ import { HOSPITAL_INFO } from '../data';
 
 interface NavbarProps {
   onNavigate: (sectionId: string) => void;
+  onOpenAppointment: () => void;
   activeSection: string;
 }
 
-export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
+export default function Navbar({ onNavigate, onOpenAppointment, activeSection }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
@@ -219,7 +220,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
             </a>
 
             <button
-              onClick={() => handleLinkClick('appointment')}
+              onClick={onOpenAppointment}
               className="relative group bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wide px-5 py-2.5 rounded-xl transition-all duration-300 glow-shadow-blue flex items-center gap-2 cursor-pointer"
             >
               <Calendar className="w-3.5 h-3.5" />
@@ -319,7 +320,10 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
 
           <div className="pt-4 border-t border-white/10">
             <button
-              onClick={() => handleLinkClick('appointment')}
+              onClick={() => {
+                setIsOpen(false);
+                onOpenAppointment();
+              }}
               className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-center block shadow-lg glow-shadow-blue cursor-pointer"
             >
               BOOK APPOINTMENT

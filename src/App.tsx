@@ -11,7 +11,8 @@ import AppointmentForm from './components/AppointmentForm';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FloatingActions from './components/FloatingActions';
-import { Bell, Calendar, Phone, ChevronDown } from 'lucide-react';
+import Modal from './components/Modal';
+import { Bell, ChevronDown } from 'lucide-react';
 import { FAQS, HOSPITAL_INFO } from './data';
 
 export default function App() {
@@ -19,12 +20,13 @@ export default function App() {
   const [selectedDoctorName, setSelectedDoctorName] = useState('');
   const [aboutSubTab, setAboutSubTab] = useState<'hospital' | 'directors' | 'why-choose'>('hospital');
   const [notification, setNotification] = useState<string | null>(null);
+  const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
 
   // Scroll spy to highlight current active navigation link
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY + 120;
-      const sections = ['home', 'about', 'departments', 'services', 'doctors', 'gallery', 'updates', 'appointment', 'contact'];
+      const sections = ['home', 'about', 'departments', 'services', 'doctors', 'gallery', 'updates', 'contact'];
       
       for (const section of sections) {
         const el = document.getElementById(section);
@@ -51,7 +53,21 @@ export default function App() {
     }, 4500);
   };
 
+  const openAppointmentModal = () => {
+    setIsAppointmentOpen(true);
+  };
+
+  const closeAppointmentModal = () => {
+    setIsAppointmentOpen(false);
+    setSelectedDoctorName('');
+  };
+
   const handleNavigation = (id: string) => {
+    if (id === 'appointment') {
+      openAppointmentModal();
+      return;
+    }
+
     let targetId = id;
     
     // Manage About Us sub-tab navigation directly from Navbar dropdown!
@@ -79,10 +95,7 @@ export default function App() {
   const handleSelectDoctor = (doctorName: string) => {
     setSelectedDoctorName(doctorName);
     triggerNotification(`Active Booking: ${doctorName}`);
-  };
-
-  const handleBookingSuccess = () => {
-    triggerNotification('Booking request recorded successfully!');
+    openAppointmentModal();
   };
 
   return (
@@ -101,13 +114,13 @@ export default function App() {
       )}
 
       {/* Sticky Glass Navbar */}
-      <Navbar onNavigate={handleNavigation} activeSection={activeSection} />
+      <Navbar onNavigate={handleNavigation} onOpenAppointment={openAppointmentModal} activeSection={activeSection} />
 
       {/* Hero Section */}
-      <Hero onNavigate={handleNavigation} />
+      <Hero onOpenAppointment={openAppointmentModal} onNavigate={handleNavigation} />
 
       {/* Interactive About Us Section (Includes Story, Managing Directors, Why Choose Us with dropdown) */}
-      <AboutUs onNavigate={handleNavigation} initialTab={aboutSubTab} key={aboutSubTab} />
+      <AboutUs initialTab={aboutSubTab} key={aboutSubTab} />
 
       {/* Clinical Departments Grid */}
       <Departments onNavigate={handleNavigation} />
@@ -116,7 +129,7 @@ export default function App() {
       <Services onNavigate={handleNavigation} />
 
       {/* Senior Consultant Surgeons */}
-      <Doctors onNavigate={handleNavigation} onSelectDoctor={handleSelectDoctor} />
+      <Doctors onSelectDoctor={handleSelectDoctor} />
 
       {/* Masonry Image & Video Gallery */}
       <Gallery />
@@ -162,11 +175,16 @@ export default function App() {
         </div>
       </section>
 
-      {/* Appointment Scheduling Form */}
-      <AppointmentForm
-        selectedDoctorName={selectedDoctorName}
-        onBookingSuccess={handleBookingSuccess}
-      />
+      {/* Appointment Booking Modal */}
+      {isAppointmentOpen && (
+        <Modal onClose={closeAppointmentModal}>
+          <AppointmentForm
+            selectedDoctorName={selectedDoctorName}
+            onBookingSuccess={() => triggerNotification('Booking request recorded successfully!')}
+            onClose={closeAppointmentModal}
+          />
+        </Modal>
+      )}
 
       {/* Clinic Locations & Contact Form */}
       <Contact />

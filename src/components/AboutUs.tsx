@@ -3,14 +3,20 @@ import { HOSPITAL_INFO, DIRECTORS, DOCTORS, WHY_CHOOSE_US } from '../data';
 import { Target, Eye, Shield, Users, ArrowRight, ChevronDown, Award, Zap, TrendingUp, Cpu, Landmark, Sparkles } from 'lucide-react';
 
 interface AboutUsProps {
-  onNavigate: (sectionId: string) => void;
   initialTab?: 'hospital' | 'directors' | 'why-choose';
   key?: string;
 }
 
-export default function AboutUs({ onNavigate, initialTab = 'hospital' }: AboutUsProps) {
+export default function AboutUs({ initialTab = 'hospital' }: AboutUsProps) {
   const [activeTab, setActiveTab] = useState<'hospital' | 'directors' | 'why-choose'>(initialTab);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const tabsInfo = {
     hospital: {
@@ -219,7 +225,7 @@ export default function AboutUs({ onNavigate, initialTab = 'hospital' }: AboutUs
                           </div>
                           
                           <button
-                            onClick={() => onNavigate('doctors')}
+                            onClick={() => scrollToSection('doctors')}
                             className="flex items-center gap-1.5 text-[11px] font-bold text-blue-600 hover:text-blue-700 transition-colors"
                           >
                             Full Credentials
@@ -301,7 +307,7 @@ export default function AboutUs({ onNavigate, initialTab = 'hospital' }: AboutUs
 
                 <div className="pt-4 flex justify-center sm:justify-start">
                   <button
-                    onClick={() => onNavigate('contact')}
+                    onClick={() => scrollToSection('contact')}
                     className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-6 py-3.5 rounded-xl shadow-lg transition-all"
                   >
                     Get Clinic Directions

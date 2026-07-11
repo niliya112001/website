@@ -3,10 +3,11 @@ import { ShieldCheck, HeartPulse, Activity, Sparkles, PhoneCall, CalendarRange }
 import { HOSPITAL_INFO } from '../data';
 
 interface HeroProps {
+  onOpenAppointment: () => void;
   onNavigate: (sectionId: string) => void;
 }
 
-export default function Hero({ onNavigate }: HeroProps) {
+export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
   const [stats, setStats] = useState({ years: 0, patients: 0, doctors: 0, beds: 0 });
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export default function Hero({ onNavigate }: HeroProps) {
             {/* Call To Actions */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
               <button
-                onClick={() => onNavigate('appointment')}
+                onClick={onOpenAppointment}
                 className="relative group bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm tracking-wide px-7 py-4 rounded-2xl transition-all duration-300 glow-shadow-blue flex items-center justify-center gap-2.5 cursor-pointer"
               >
                 <CalendarRange className="w-4 h-4" />

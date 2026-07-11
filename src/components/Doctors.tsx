@@ -3,15 +3,13 @@ import { DOCTORS } from '../data';
 import { Award, Heart, Clipboard, Clock, CheckCircle2, User, Sparkles } from 'lucide-react';
 
 interface DoctorsProps {
-  onNavigate: (sectionId: string) => void;
   onSelectDoctor: (doctorName: string) => void;
 }
 
-export default function Doctors({ onNavigate, onSelectDoctor }: DoctorsProps) {
+export default function Doctors({ onSelectDoctor }: DoctorsProps) {
   
   const handleBooking = (doctorName: string) => {
     onSelectDoctor(doctorName);
-    onNavigate('appointment');
   };
 
   return (

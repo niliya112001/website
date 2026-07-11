@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DOCTORS, DEPARTMENTS } from '../data';
 import { Appointment } from '../types';
 import { Calendar, User, Phone, Mail, Clock, HelpCircle, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react';
@@ -6,9 +6,10 @@ import { Calendar, User, Phone, Mail, Clock, HelpCircle, CheckCircle2, ChevronDo
 interface AppointmentFormProps {
   selectedDoctorName?: string;
   onBookingSuccess: () => void;
+  onClose?: () => void;
 }
 
-export default function AppointmentForm({ selectedDoctorName = '', onBookingSuccess }: AppointmentFormProps) {
+export default function AppointmentForm({ selectedDoctorName = '', onBookingSuccess, onClose }: AppointmentFormProps) {
   const [formData, setFormData] = useState({
     patientName: '',
     phone: '',
@@ -27,6 +28,7 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessCard, setShowSuccessCard] = useState(false);
   const [bookedDetails, setBookedDetails] = useState<Appointment | null>(null);
+  const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // If a doctor was selected externally, set it and auto-set the department!
   useEffect(() => {
@@ -45,6 +47,38 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
       }
     }
   }, [selectedDoctorName]);
+
+  // Clean up auto-close timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoCloseTimerRef.current) {
+        clearTimeout(autoCloseTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleClose = useCallback(() => {
+    if (autoCloseTimerRef.current) {
+      clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = null;
+    }
+    setShowSuccessCard(false);
+    setBookedDetails(null);
+    setFormData({
+      patientName: '',
+      phone: '',
+      email: '',
+      age: '',
+      gender: 'male',
+      department: '',
+      doctor: '',
+      date: '',
+      timeSlot: '10:30 AM - 12:30 PM',
+      reason: '',
+      message: ''
+    });
+    onClose?.();
+  }, [onClose]);
 
   // Handle department change to auto-fill the correct chief doctor!
   const handleDeptChange = (deptId: string) => {
@@ -114,6 +148,13 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
       setIsSubmitting(false);
       setShowSuccessCard(true);
       onBookingSuccess();
+
+      // Auto-close modal after 3 seconds if onClose is provided
+      if (onClose) {
+        autoCloseTimerRef.current = setTimeout(() => {
+          handleClose();
+        }, 3000);
+      }
 
       // Reset form
       setFormData({
@@ -424,7 +465,7 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
               </div>
 
               <button
-                onClick={() => setShowSuccessCard(false)}
+                onClick={handleClose}
                 className="w-full max-w-xs py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider rounded-xl shadow-md transition-all cursor-pointer uppercase"
               >
                 Close Receipt
