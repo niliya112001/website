@@ -70,3 +70,13 @@ export interface Appointment {
   status: 'pending' | 'confirmed';
   createdAt: string;
 }
+
+export interface ContactInquiry {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  subject: string;
+  message: string;
+  createdAt: string;
+}

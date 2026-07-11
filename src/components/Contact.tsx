@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HOSPITAL_INFO } from '../data';
+import { createContactInquiry } from '../api';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, ShieldAlert } from 'lucide-react';
 
 export default function Contact() {
@@ -13,17 +14,30 @@ export default function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    setApiError(null);
+
+    try {
+      await createContactInquiry({
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
+      });
       setIsSubmitting(false);
       setSubmitted(true);
       setFormData({ name: '', phone: '', email: '', subject: '', message: '' });
-    }, 1500);
+    } catch (err) {
+      setIsSubmitting(false);
+      setApiError(err instanceof Error ? err.message : 'Failed to send message. Please try again.');
+    }
   };
 
   return (
@@ -210,6 +224,12 @@ export default function Contact() {
                     className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:border-blue-500/50 focus:outline-none bg-white font-medium text-xs transition-colors resize-none"
                   ></textarea>
                 </div>
+
+                {apiError && (
+                  <div className="bg-rose-50 border border-rose-200 rounded-xl px-4 py-3 text-xs font-semibold text-rose-700">
+                    {apiError}
+                  </div>
+                )}
 
                 <button
                   type="submit"

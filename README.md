@@ -1,20 +1,60 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Nilaya Hospital — Neon PostgreSQL Backend
 
-# Run and deploy your AI Studio app
+## Architecture
 
-This contains everything you need to run your app locally.
+```
+React (Vite)  →  /api/* proxy  →  Express (port 3001)  →  Neon PostgreSQL
+                     ↓
+              src/api.ts          server/index.ts         @neondatabase/serverless
+```
 
-View your app in AI Studio: https://ai.studio/apps/10eb7979-f5ba-4249-b284-562a781ee1c3
+- **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS 4
+- **Backend**: Express 4 + TypeScript (via tsx)
+- **Database**: Neon PostgreSQL (serverless driver over HTTP)
 
-## Run Locally
+## Setup
 
-**Prerequisites:**  Node.js
+### 1. Create a Neon database
 
+1. Sign up at [neon.tech](https://neon.tech)
+2. Create a project and copy the connection string
+3. Run `server/schema.sql` against your database (via Neon SQL Editor or `psql`)
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 2. Configure environment
+
+```bash
+cp .env.example .env
+# Edit .env and set NEON_DATABASE_URL
+```
+
+### 3. Install and run
+
+```bash
+npm install
+npm run dev          # Starts Vite (3000) + Express (3001) in parallel
+```
+
+### 4. Production
+
+```bash
+npm run build        # Builds frontend to dist/
+npm start            # Starts Express serving API + static files from dist/
+```
+
+## Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `NEON_DATABASE_URL` | Yes | Neon PostgreSQL connection string (server only) |
+| `PORT` | No | Express port (default: 3001) |
+| `VITE_API_URL` | No | Override API base URL for cross-origin deployments |
+
+## API Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/api/appointments` | Create an appointment booking |
+| `GET` | `/api/appointments` | List recent appointments |
+| `POST` | `/api/contacts` | Submit a contact inquiry |
+| `GET` | `/api/contacts` | List recent inquiries |
+| `GET` | `/api/health` | Health check |

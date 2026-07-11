@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DOCTORS, DEPARTMENTS } from '../data';
 import { Appointment } from '../types';
+import { createAppointment } from '../api';
 import { Calendar, User, Phone, Mail, Clock, HelpCircle, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react';
 
 interface AppointmentFormProps {
@@ -28,6 +29,7 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessCard, setShowSuccessCard] = useState(false);
   const [bookedDetails, setBookedDetails] = useState<Appointment | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
   const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // If a doctor was selected externally, set it and auto-set the department!
@@ -114,37 +116,29 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setApiError(null);
 
-    // Simulate database secure reservation delay
-    setTimeout(() => {
-      const generatedAppointment: Appointment = {
-        id: `APT-${Math.floor(100000 + Math.random() * 900000)}`,
-        patientName: formData.patientName,
-        phone: formData.phone,
-        email: formData.email,
-        age: parseInt(formData.age),
-        gender: formData.gender as 'male' | 'female',
+    try {
+      const appointment = await createAppointment({
+        patientName: formData.patientName.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        age: parseInt(formData.age, 10),
+        gender: formData.gender as 'male' | 'female' | 'other',
         department: formData.department,
         doctor: formData.doctor,
         date: formData.date,
         timeSlot: formData.timeSlot,
-        reason: formData.reason,
-        message: formData.message,
-        status: 'confirmed',
-        createdAt: new Date().toISOString()
-      };
+        reason: formData.reason.trim(),
+        message: formData.message.trim(),
+      });
 
-      // Save to localStorage for historical persistence
-      const currentList = JSON.parse(localStorage.getItem('nilaya_appointments') || '[]');
-      currentList.push(generatedAppointment);
-      localStorage.setItem('nilaya_appointments', JSON.stringify(currentList));
-
-      setBookedDetails(generatedAppointment);
+      setBookedDetails(appointment);
       setIsSubmitting(false);
       setShowSuccessCard(true);
       onBookingSuccess();
@@ -155,22 +149,10 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
           handleClose();
         }, 3000);
       }
-
-      // Reset form
-      setFormData({
-        patientName: '',
-        phone: '',
-        email: '',
-        age: '',
-        gender: 'male',
-        department: '',
-        doctor: '',
-        date: '',
-        timeSlot: '10:30 AM - 12:30 PM',
-        reason: '',
-        message: ''
-      });
-    }, 1500);
+    } catch (err) {
+      setIsSubmitting(false);
+      setApiError(err instanceof Error ? err.message : 'Booking failed. Please try again.');
+    }
   };
 
   return (
@@ -401,6 +383,13 @@ export default function AppointmentForm({ selectedDoctorName = '', onBookingSucc
                 className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:border-blue-500/50 focus:outline-none bg-white font-medium text-sm transition-colors resize-none"
               ></textarea>
             </div>
+
+            {/* API Error Display */}
+            {apiError && (
+              <div className="bg-rose-50 border border-rose-200 rounded-xl px-4 py-3 text-xs font-semibold text-rose-700">
+                {apiError}
+              </div>
+            )}
 
             {/* Submit button */}
             <div className="pt-4 text-center">
