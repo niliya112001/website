@@ -4,16 +4,12 @@ import { GalleryItem } from '../types';
 import { Play, Image as ImageIcon, Video as VideoIcon, X, Eye, Film, Layers } from 'lucide-react';
 
 export default function Gallery() {
-  const [activeTab, setActiveTab] = useState<'image' | 'video'>('image');
-  const [imageFilter, setImageFilter] = useState<'all' | 'facility' | 'equipment'>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'facility' | 'equipment' | 'video'>('all');
   const [activeMedia, setActiveMedia] = useState<GalleryItem | null>(null);
 
-  const images = GALLERY.filter(item => item.type === 'image');
-  const videos = GALLERY.filter(item => item.type === 'video');
-
-  const filteredImages = images.filter(img => {
-    if (imageFilter === 'all') return true;
-    return img.category === imageFilter;
+  const filteredItems = GALLERY.filter(item => {
+    if (activeFilter === 'all') return true;
+    return item.category === activeFilter;
   });
 
   return (
@@ -36,120 +32,105 @@ export default function Gallery() {
           </p>
         </div>
 
-        {/* Media Switcher Buttons */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-slate-200/80 p-1.5 rounded-2xl flex gap-1.5 border border-slate-300/30">
+        {/* Category Filter Buttons */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {(['all', 'facility', 'equipment', 'video'] as const).map((filter) => (
             <button
-              onClick={() => setActiveTab('image')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                activeTab === 'image'
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wide transition-all cursor-pointer ${
+                activeFilter === filter
                   ? 'bg-blue-600 text-white shadow-md glow-shadow-blue'
-                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
+                  : 'bg-white text-slate-600 border border-slate-200/60 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
-              <ImageIcon className="w-4 h-4" />
-              Image Gallery ({images.length})
+              {filter === 'all'
+                ? 'All'
+                : filter === 'facility'
+                ? 'Hospital Facility'
+                : filter === 'equipment'
+                ? 'Advanced Equipment'
+                : 'Videos'}
             </button>
-            <button
-              onClick={() => setActiveTab('video')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                activeTab === 'video'
-                  ? 'bg-blue-600 text-white shadow-md glow-shadow-blue'
-                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
-              }`}
-            >
-              <VideoIcon className="w-4 h-4" />
-              Video Gallery ({videos.length})
-            </button>
-          </div>
+          ))}
         </div>
 
-        {/* IMAGE GALLERY DISPLAY */}
-        {activeTab === 'image' && (
+        {/* GALLERY DISPLAY */}
+        {filteredItems.length > 0 ? (
           <div className="space-y-8 animate-fade-in">
-            {/* Category Sub-Filters */}
-            <div className="flex justify-center gap-2">
-              {(['all', 'facility', 'equipment'] as const).map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setImageFilter(filter)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
-                    imageFilter === filter
-                      ? 'bg-slate-900 text-white shadow-sm'
-                      : 'bg-white text-slate-600 border border-slate-200/60 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  {filter === 'all' ? 'All Images' : filter === 'facility' ? 'Hospital Facilities' : 'Advanced Equipment'}
-                </button>
-              ))}
-            </div>
-
-            {/* Masonry Grid */}
+            {/* Grid */}
             <div className="masonry-grid max-w-6xl mx-auto">
-              {filteredImages.map((img) => (
-                <div
-                  key={img.id}
-                  onClick={() => setActiveMedia(img)}
-                  className="group relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-950 cursor-pointer shadow-md hover:shadow-2xl hover-3d-card border border-white/50"
-                >
-                  <img
-                    src={img.url}
-                    alt={img.title}
-                    className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  
-                  {/* Glass Card Details Overlay on Hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">{img.category}</span>
-                      <h4 className="text-xs font-bold mt-1 leading-snug">{img.title}</h4>
-                      <div className="flex items-center gap-1.5 mt-2.5 text-[10px] text-slate-200 font-semibold">
-                        <Eye className="w-3.5 h-3.5 text-blue-400" />
-                        <span>Enlarge View</span>
+              {filteredItems.map((item) => {
+                if (item.type === 'image') {
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setActiveMedia(item)}
+                      className="group relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-950 cursor-pointer shadow-md hover:shadow-2xl hover-3d-card border border-white/50"
+                    >
+                      <img
+                        src={item.url}
+                        alt={item.title}
+                        className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                      
+                      {/* Glass Card Details Overlay on Hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                          <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">
+                            {item.category === 'facility' ? 'Hospital Facility' : 'Advanced Equipment'}
+                          </span>
+                          <h4 className="text-xs font-bold mt-1 leading-snug">{item.title}</h4>
+                          <div className="flex items-center gap-1.5 mt-2.5 text-[10px] text-slate-200 font-semibold">
+                            <Eye className="w-3.5 h-3.5 text-blue-400" />
+                            <span>Enlarge View</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                } else {
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setActiveMedia(item)}
+                      className="group relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-950 cursor-pointer shadow-md hover:shadow-2xl hover-3d-card border border-white/50"
+                    >
+                      {item.thumbnail && (
+                        <img
+                          src={item.thumbnail}
+                          alt={item.title}
+                          className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                      )}
+                      
+                      {/* Dark overlay & Play overlay */}
+                      <div className="absolute inset-0 bg-slate-950/45 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-blue-600/90 text-white flex items-center justify-center shadow-lg border border-white/20 group-hover:scale-110 group-hover:bg-blue-600 transition-all duration-300 relative z-10 glow-shadow-blue">
+                          <Play className="w-6 h-6 fill-white translate-x-0.5" />
+                        </div>
+                      </div>
+
+                      {/* Subtitle / Title Strip */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent p-5 text-white">
+                        <span className="text-[10px] font-bold text-pink-400 uppercase tracking-widest block flex items-center gap-1">
+                          <Film className="w-3.5 h-3.5" />
+                          Interactive Video Review
+                        </span>
+                        <h4 className="text-xs font-bold mt-1 tracking-tight leading-snug">{item.title}</h4>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
             </div>
           </div>
-        )}
-
-        {/* VIDEO GALLERY DISPLAY */}
-        {activeTab === 'video' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto animate-fade-in">
-            {videos.map((vid) => (
-              <div
-                key={vid.id}
-                onClick={() => setActiveMedia(vid)}
-                className="group relative rounded-3xl overflow-hidden aspect-video bg-slate-950 cursor-pointer shadow-lg hover:shadow-2xl hover-3d-card border border-white"
-              >
-                {vid.thumbnail && (
-                  <img
-                    src={vid.thumbnail}
-                    alt={vid.title}
-                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
-                  />
-                )}
-                
-                {/* Dark overlay & Play overlay */}
-                <div className="absolute inset-0 bg-slate-950/45 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-blue-600/90 text-white flex items-center justify-center shadow-lg border border-white/20 group-hover:scale-110 group-hover:bg-blue-600 transition-all duration-300 relative z-10 glow-shadow-blue">
-                    <Play className="w-6 h-6 fill-white translate-x-0.5" />
-                  </div>
-                </div>
-
-                {/* Subtitle / Title Strip */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent p-5 text-white">
-                  <span className="text-[10px] font-bold text-pink-400 uppercase tracking-widest block flex items-center gap-1">
-                    <Film className="w-3.5 h-3.5" />
-                    Interactive Video Review
-                  </span>
-                  <h4 className="text-xs font-bold mt-1 tracking-tight leading-snug">{vid.title}</h4>
-                </div>
-              </div>
-            ))}
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
+            <Layers className="w-12 h-12 text-slate-300 mb-3" />
+            <p className="text-sm font-medium text-slate-400">No images available.</p>
           </div>
         )}
 
@@ -186,7 +167,13 @@ export default function Gallery() {
 
               {/* Caption */}
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 w-full max-w-3xl text-white">
-                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">{activeMedia.category}</span>
+                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">
+                  {activeMedia.category === 'facility'
+                    ? 'Hospital Facility'
+                    : activeMedia.category === 'equipment'
+                    ? 'Advanced Equipment'
+                    : 'Videos'}
+                </span>
                 <h3 className="text-sm font-bold mt-1 tracking-tight">{activeMedia.title}</h3>
               </div>
             </div>

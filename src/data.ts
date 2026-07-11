@@ -1,4 +1,15 @@
 import { Doctor, Department, MedicalService, GalleryItem, UpdateItem } from './types';
+import {
+  getDoctorPhoto,
+  HOSPITAL_FACILITY_PHOTOS,
+  HOSPITAL_FACILITY_FILENAMES,
+  ADVANCED_EQUIPMENT_PHOTOS,
+  ADVANCED_EQUIPMENT_FILENAMES,
+  VIDEO_THUMBNAIL_PHOTOS,
+  VIDEO_THUMBNAIL_FILENAMES,
+  DEPARTMENT_IMAGES,
+  SERVICE_IMAGES,
+} from './assets/images';
 
 export const HOSPITAL_INFO = {
   name: 'Nilaya Urostone & Gynae-IVF Hospital',
@@ -34,7 +45,7 @@ export const DOCTORS: Doctor[] = [
     ],
     regNo: '61688',
     experience: '12+ Years of Surgical Excellence',
-    avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500',
+    avatar: getDoctorPhoto(0),
     timing: '10:00 AM - 2:00 PM | 4:00 PM - 6:00 PM',
     gender: 'male'
   },
@@ -59,7 +70,7 @@ export const DOCTORS: Doctor[] = [
       'Ex- IVF Consultant (Indira IVF)',
       'Ex- IVF Consultant (Seeds of Innocence)'
     ],
-    avatar: 'https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=400&h=500',
+    avatar: getDoctorPhoto(1),
     timing: '10:30 AM - 2:30 PM | 4:30 PM - 6:30 PM',
     gender: 'female'
   }
@@ -71,14 +82,14 @@ export const DIRECTORS = [
     designation: 'Managing Director & Chief Urologist',
     message: 'At Nilaya Hospital, our mission is to deliver world-class super-specialty healthcare to the people of Begusarai and Bihar. By pairing state-of-the-art medical technology with highly precise surgical techniques, we ensure our patients receive treatment on par with major metro hospitals, combined with home-like compassion and affordability.',
     signature: 'Dr. K. Atharv',
-    avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300&h=400'
+    avatar: getDoctorPhoto(0)
   },
   {
     name: 'Dr. Nisha Kumari',
     designation: 'Co-Founder & Clinical Director (IVF/Gynae)',
     message: 'Parenthood is a beautiful journey, and our goal is to make advanced fertility treatments like IVF, IUI, and laparoscopic gynae surgery accessible to every family. We bring international protocols and clinical experience from premier institutions like LHMC New Delhi and Indira IVF directly to our local community with custom care plans.',
     signature: 'Dr. Nisha Kumari',
-    avatar: 'https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=300&h=400'
+    avatar: getDoctorPhoto(1)
   }
 ];
 
@@ -89,7 +100,7 @@ export const DEPARTMENTS: Department[] = [
     description: 'Comprehensive medical and surgical management for kidney stones, prostate disorders, urinary infections, and male infertility issues with cutting-edge lasers.',
     icon: 'Stethoscope',
     color: 'from-blue-500 to-cyan-500',
-    image: 'https://images.unsplash.com/photo-1579684389782-64d84b5e901a?auto=format&fit=crop&q=80&w=300&h=200',
+    image: DEPARTMENT_IMAGES.urology,
     detailedServices: [
       'Laser Kidney Stone Treatment (URSL, PCNL, RIRS)',
       'Laser Prostate Surgery (HoLEP, TURP)',
@@ -105,7 +116,7 @@ export const DEPARTMENTS: Department[] = [
     description: 'World-class reproductive medicine and fertility solutions including IVF, ICSI, and IUI, coupled with premium obstetric care for a safe motherhood journey.',
     icon: 'Heart',
     color: 'from-pink-500 to-purple-500',
-    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300&h=200',
+    image: DEPARTMENT_IMAGES.gynaeIvf,
     detailedServices: [
       'In-Vitro Fertilization (IVF) & Embryo Transfer',
       'Intracytoplasmic Sperm Injection (ICSI)',
@@ -121,7 +132,7 @@ export const DEPARTMENTS: Department[] = [
     description: 'Minimally invasive keyhole surgeries for appendix, gallbladder, hernia, and gynae conditions, ensuring faster recovery and minimal scarring.',
     icon: 'Activity',
     color: 'from-emerald-500 to-teal-500',
-    image: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&q=80&w=300&h=200',
+    image: DEPARTMENT_IMAGES.laparoscopy,
     detailedServices: [
       'Laparoscopic Cholecystectomy (Gallbladder Stone)',
       'Laparoscopic Appendectomy (Appendix removal)',
@@ -137,7 +148,7 @@ export const DEPARTMENTS: Department[] = [
     description: 'Equipped with digital high-frequency X-Ray, high-resolution ultrasound, and an in-house laboratory to provide quick, reliable diagnostics.',
     icon: 'Shield',
     color: 'from-indigo-500 to-violet-500',
-    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=300&h=200',
+    image: DEPARTMENT_IMAGES.diagnostics,
     detailedServices: [
       '3D/4D High-Resolution Obstetrical Ultrasound',
       'Digital high-frequency X-Ray',
@@ -156,7 +167,7 @@ export const SERVICES: MedicalService[] = [
     description: 'Equipped to handle acute urological conditions, emergency cesareans, appendicitis, and critical trauma cases with round-the-clock specialists.',
     icon: 'Flame',
     tag: 'Emergency',
-    image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&q=80&w=300&h=200'
+    image: SERVICE_IMAGES.emergency
   },
   {
     id: 'laser-urology',
@@ -164,7 +175,7 @@ export const SERVICES: MedicalService[] = [
     description: 'State-of-the-art Holmium Laser for completely sutureless, painless, and rapid dissolution of kidney and ureteral stones.',
     icon: 'Sparkles',
     tag: 'Advanced Tech',
-    image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=300&h=200'
+    image: SERVICE_IMAGES.laserUrology
   },
   {
     id: 'ivf-lab',
@@ -172,7 +183,7 @@ export const SERVICES: MedicalService[] = [
     description: 'Heads-up incubator systems, highly filtered cleanrooms, and computerized embryo tracking to achieve maximum success rates.',
     icon: 'FlameKindling',
     tag: 'Success Oriented',
-    image: 'https://images.unsplash.com/photo-1579154204601-01588f351167?auto=format&fit=crop&q=80&w=300&h=200'
+    image: SERVICE_IMAGES.ivfLab
   },
   {
     id: 'modular-ot',
@@ -180,7 +191,7 @@ export const SERVICES: MedicalService[] = [
     description: 'Laminar air flows, HEPA filters, and high-definition laparoscopic towers to minimize postoperative infections and ensure safety.',
     icon: 'Layers',
     tag: 'Surgical Safety',
-    image: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&q=80&w=300&h=200'
+    image: SERVICE_IMAGES.modularOt
   },
   {
     id: 'pathology',
@@ -188,7 +199,7 @@ export const SERVICES: MedicalService[] = [
     description: 'Comprehensive, fully-automated hematology, biochemistry, and hormone analysis with digital reports sent straight to your phone.',
     icon: 'Thermometer',
     tag: '24 Hours',
-    image: 'https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?auto=format&fit=crop&q=80&w=300&h=200'
+    image: SERVICE_IMAGES.pathology
   },
   {
     id: 'cashless',
@@ -196,70 +207,70 @@ export const SERVICES: MedicalService[] = [
     description: 'Empaneled with major government and private insurance networks (TPA) for seamless cashless treatment.',
     icon: 'CreditCard',
     tag: 'Financial Comfort',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=300&h=200'
+    image: SERVICE_IMAGES.cashless
   }
 ];
 
-export const GALLERY: GalleryItem[] = [
-  {
-    id: 'g-ext',
-    title: 'Nilaya Hospital Modern Elevation',
-    category: 'facility',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1587351021355-a479a299d2f9?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'g-ot',
-    title: 'Ultra-Clean Modular Operation Theatre',
-    category: 'facility',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'g-ivf',
-    title: 'State-of-the-art IVF Embryology Lab',
-    category: 'equipment',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1579154204601-01588f351167?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'g-recept',
-    title: 'Premium Glassmorphic Patient Reception',
-    category: 'facility',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'g-room',
-    title: 'Private Patient Recovery Suite',
-    category: 'facility',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'g-usg',
-    title: 'Advanced 3D/4D Color Doppler Ultrasound',
-    category: 'equipment',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'v-tour',
-    title: 'Nilaya Hospital Cinematic 3D Walkthrough Tour',
-    category: 'facility',
-    type: 'video',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4', // Premium placeholder video
-    thumbnail: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'v-testimonial',
-    title: 'Successful IVF Journey - Patient Testimonial',
-    category: 'success',
-    type: 'video',
-    url: 'https://www.w3schools.com/html/movie.mp4', // Premium placeholder video
-    thumbnail: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&q=80&w=800'
-  }
-];
+/**
+ * Gallery items — dynamically generated from subfolders under src/assets/gallery/.
+ *
+ * Just drop files into:
+ *   src/assets/gallery/hospital-facility/
+ *   src/assets/gallery/advanced-equipment/
+ *   src/assets/gallery/videos/
+ *
+ * Filenames are used to derive titles (e.g. "operation-theatre.jpg" → "Operation Theatre").
+ */
+function buildGalleryItems(): GalleryItem[] {
+  const items: GalleryItem[] = [];
+
+  const formatTitle = (rawName: string) => {
+    return rawName
+      .replace(/[-_]/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
+  // 1. Hospital Facility images
+  HOSPITAL_FACILITY_PHOTOS.forEach((url, idx) => {
+    const rawName = HOSPITAL_FACILITY_FILENAMES[idx] ?? `facility-${idx + 1}`;
+    items.push({
+      id: `facility-${idx}`,
+      title: formatTitle(rawName),
+      category: 'facility',
+      type: 'image',
+      url,
+    });
+  });
+
+  // 2. Advanced Equipment images
+  ADVANCED_EQUIPMENT_PHOTOS.forEach((url, idx) => {
+    const rawName = ADVANCED_EQUIPMENT_FILENAMES[idx] ?? `equipment-${idx + 1}`;
+    items.push({
+      id: `equipment-${idx}`,
+      title: formatTitle(rawName),
+      category: 'equipment',
+      type: 'image',
+      url,
+    });
+  });
+
+  // 3. Video thumbnails
+  VIDEO_THUMBNAIL_PHOTOS.forEach((url, idx) => {
+    const rawName = VIDEO_THUMBNAIL_FILENAMES[idx] ?? `video-${idx + 1}`;
+    items.push({
+      id: `video-${idx}`,
+      title: formatTitle(rawName),
+      category: 'video',
+      type: 'video',
+      url: 'https://www.w3schools.com/html/mov_bbb.mp4', // Keep existing play behavior
+      thumbnail: url,
+    });
+  });
+
+  return items;
+}
+
+export const GALLERY: GalleryItem[] = buildGalleryItems();
 
 export const UPDATES: UpdateItem[] = [
   {

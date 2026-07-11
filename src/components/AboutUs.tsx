@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HOSPITAL_INFO, DIRECTORS, DOCTORS, WHY_CHOOSE_US } from '../data';
+import { ABOUT_IMAGES } from '../assets/images';
 import { Target, Eye, Shield, Users, ArrowRight, ChevronDown, Award, Zap, TrendingUp, Cpu, Landmark, Sparkles } from 'lucide-react';
 
 interface AboutUsProps {
@@ -121,7 +122,7 @@ export default function AboutUs({ initialTab = 'hospital' }: AboutUsProps) {
               <div className="lg:col-span-5 relative flex justify-center">
                 <div className="relative w-full max-w-sm aspect-video sm:aspect-square bg-slate-900 rounded-3xl overflow-hidden shadow-2xl group hover-3d-card">
                   <img
-                    src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=600"
+                    src={ABOUT_IMAGES.hospitalBuilding}
                     alt="Nilaya Hospital Building"
                     className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
                   />

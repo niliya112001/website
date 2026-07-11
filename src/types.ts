@@ -39,7 +39,7 @@ export interface MedicalService {
 export interface GalleryItem {
   id: string;
   title: string;
-  category: 'facility' | 'equipment' | 'camp' | 'success';
+  category: 'facility' | 'equipment' | 'video';
   type: 'image' | 'video';
   url: string;
   thumbnail?: string;

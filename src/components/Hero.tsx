@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ShieldCheck, HeartPulse, Activity, Sparkles, PhoneCall, CalendarRange } from 'lucide-react';
 import { HOSPITAL_INFO } from '../data';
+import { LOGO_SRC, HERO_BG } from '../assets/images';
 
 interface HeroProps {
   onOpenAppointment: () => void;
@@ -40,6 +41,30 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
       id="home"
       className="relative pt-24 pb-12 flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50"
     >
+      {/* Optional Hero Background Image — auto-detected from src/assets/hero/ */}
+      {HERO_BG && (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={HERO_BG}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-blue-50/85 to-indigo-50/90"></div>
+        </div>
+      )}
+
+      {/* Background Logo — subtle branding watermark */}
+      <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
+        <img
+          src={LOGO_SRC}
+          alt=""
+          aria-hidden="true"
+          className="w-[600px] h-[600px] max-w-[80vw] max-h-[80vh] object-contain opacity-[0.07] blur-[2px]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/80"></div>
+      </div>
+
       {/* Dynamic Lighting & Gradient Blobs */}
       <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-blue-400/25 rounded-full filter blur-3xl animate-pulse-slow"></div>
       <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-cyan-300/20 rounded-full filter blur-3xl animate-pulse-slow"></div>

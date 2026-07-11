@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Phone, Heart, Award, ShieldAlert, Calendar } from 'lucide-react';
 import { HOSPITAL_INFO } from '../data';
+import { LOGO_SRC } from '../assets/images';
 
 interface NavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -41,21 +42,16 @@ export default function Navbar({ onNavigate, onOpenAppointment, activeSection }:
           {/* Logo Brand */}
           <div
             id="nav-brand"
-            className="flex items-center space-x-3 cursor-pointer group"
+            className="flex items-center cursor-pointer group"
             onClick={() => handleLinkClick('home')}
           >
-            <div className="relative flex items-center justify-center w-11 h-11 bg-blue-600 rounded-xl glow-shadow-blue transform group-hover:rotate-12 transition-transform duration-300">
-              <Heart className="text-white w-6 h-6 animate-pulse-slow" />
-              <div className="absolute inset-0 bg-blue-500 rounded-xl filter blur-sm opacity-30 -z-10 group-hover:opacity-60 transition-opacity"></div>
-            </div>
-            <div>
-              <span className={`font-bold text-lg leading-tight tracking-tight block ${isScrolled ? 'text-white' : 'text-slate-900'}`}>
-                NILAYA
-              </span>
-              <span className="text-[10px] uppercase tracking-widest font-semibold text-blue-500 block">
-                Urostone & IVF Hospital
-              </span>
-            </div>
+            <img
+              src={LOGO_SRC}
+              alt="Nilaya Urostone & Gynae-IVF Hospital"
+              className={`h-11 w-auto transition-all duration-300 ${
+                isScrolled ? 'brightness-0 invert' : ''
+              }`}
+            />
           </div>
 
           {/* Desktop Navigation */}
