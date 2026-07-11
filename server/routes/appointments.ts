@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db.js';
+import { sendAppointmentNotification } from '../services/email.js';
 
 const router = Router();
 
@@ -90,7 +91,26 @@ router.post('/', async (req: Request, res: Response) => {
 
   try {
     const { rows } = await pool.query(sql, params);
-    return res.status(201).json({ ok: true, appointment: rows[0] });
+    const appointment = rows[0];
+
+    sendAppointmentNotification({
+      patientName: appointment.patientName,
+      phone: appointment.phone,
+      email: appointment.email,
+      age: appointment.age,
+      gender: appointment.gender,
+      department: appointment.department,
+      doctor: appointment.doctor,
+      date: appointment.date,
+      timeSlot: appointment.timeSlot,
+      reason: appointment.reason,
+      message: appointment.message,
+      createdAt: appointment.createdAt,
+    }).catch((err) => {
+      console.error('[API] Email notification failed (appointment saved):', err);
+    });
+
+    return res.status(201).json({ ok: true, appointment });
   } catch (err) {
     console.error('[API] POST /api/appointments error:', err);
     return res.status(500).json({ ok: false, errors: ['Failed to create appointment. Please try again.'] });

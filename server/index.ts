@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import appointmentsRouter from './routes/appointments.js';
 import contactsRouter from './routes/contacts.js';
+import { verifySMTP } from './services/email.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = dirname(__filename);
@@ -38,6 +39,7 @@ app.get('*', (_req, res) => {
 
 /* ─── Start ─────────────────────────────────────────────────────────────── */
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`[Server] API running on http://localhost:${PORT}`);
+  await verifySMTP();
 });
