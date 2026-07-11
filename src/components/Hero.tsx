@@ -232,37 +232,40 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/25 rounded-full filter blur-[80px] pointer-events-none animate-pulse-slow"></div>
             <div className="absolute top-1/3 left-2/3 -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-indigo-500/20 rounded-full filter blur-[90px] pointer-events-none"></div>
 
-            {/* The Main 3D Card Panel */}
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/4.5] bg-gradient-to-br from-[#0c1524]/95 via-[#132039]/90 to-[#0a111c]/95 rounded-[2.25rem] p-6 shadow-[0_30px_70px_-15px_rgba(15,23,42,0.8),_0_0_40px_rgba(59,130,246,0.2),_inset_0_1px_3px_rgba(255,255,255,0.15)] border border-white/10 hover-3d-card animate-breath transition-all duration-500 flex flex-col justify-between overflow-hidden">
+            {/* The Main 3D Card Panel with Premium CSS classes */}
+            <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/4.5] premium-dashboard-card p-6 transition-all duration-500 flex flex-col justify-between overflow-hidden">
               
-              {/* Radial reflection & lighting overlays */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_50%)] pointer-events-none"></div>
-              <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none"></div>
+              {/* Radial reflection & lighting overlays (Top and Bottom glow gradients) */}
+              <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at top left, rgba(98,150,255,.55), transparent 55%)' }}></div>
+              <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at bottom right, rgba(110,60,255,.45), transparent 50%)' }}></div>
+              <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"></div>
+              
+              {/* Premium sweep shine effect overlay */}
+              <div className="absolute inset-0 animate-shine pointer-events-none mix-blend-overlay"></div>
 
               {/* Card Header */}
               <div className="flex justify-between items-start translate-z-30">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute"></span>
-                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest pl-1">System Live & Online</span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 absolute"></span>
+                    <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest pl-1">Live Telemetry</span>
                   </div>
-                  <h3 className="text-lg font-bold tracking-tight text-white mt-1.5">Nilaya Robotic AI</h3>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Engine v3.14</p>
+                  <h3 className="font-extrabold text-[28px] sm:text-[32px] lg:text-[40px] leading-tight tracking-tight text-white mt-1.5">Nilaya AI</h3>
+                  <p className="text-[10px] text-white/70 font-semibold uppercase tracking-widest mt-0.5">Robotics Engine v3.1</p>
                 </div>
                 
-                {/* AI Badge */}
-                <div className="flex items-center gap-1 bg-blue-500/10 border border-blue-500/30 rounded-xl px-2.5 py-1 text-[10px] font-bold text-blue-400 glow-shadow-blue select-none">
-                  <Sparkles className="w-3 h-3 animate-pulse" />
-                  AI ASSISTED
+                {/* Heart Button */}
+                <div className="w-10 h-10 rounded-xl heart-icon-button flex items-center justify-center border border-white/20 select-none">
+                  <HeartPulse className="w-5 h-5 text-white" />
                 </div>
               </div>
 
               {/* ECG Line (Futuristic Glowing Line Drawing) */}
               <div className="my-auto py-2 translate-z-20 flex flex-col justify-center">
                 <div className="flex justify-between items-center px-2 mb-2">
-                  <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Cardiac Telemetry</span>
-                  <span className="text-xs font-mono text-rose-400 animate-pulse font-bold">78 BPM</span>
+                  <span className="text-[9px] font-semibold text-white/70 uppercase tracking-wider">Cardiac Telemetry</span>
+                  <span className="text-xs font-mono text-cyan-300 animate-pulse font-bold">78 BPM</span>
                 </div>
                 <div className="relative h-20 bg-slate-950/60 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center p-2">
                   <svg className="w-full h-full stroke-blue-500 stroke-2 fill-none overflow-visible" viewBox="0 0 400 100">
@@ -272,7 +275,7 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
                     />
                     <path
                       d="M 0 50 Q 25 50 50 50 Q 60 50 65 20 T 75 80 T 85 50 L 150 50 Q 160 50 165 10 T 175 90 T 185 50 L 250 50 Q 260 50 265 30 T 275 70 T 285 50 L 400 50"
-                      className="stroke-cyan-400 stroke-[3px] ecg-path filter drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                      className="stroke-cyan-400 stroke-[3px] ecg-path"
                     />
                   </svg>
                 </div>
@@ -281,67 +284,67 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
               {/* Badges / Indicators */}
               <div className="grid grid-cols-2 gap-3 mb-4 translate-z-20">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col justify-between shadow-inner">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">IVF Success Rate</span>
+                  <span className="text-[9px] text-white/70 font-bold uppercase tracking-wider block">IVF Success Rate</span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-xl font-extrabold text-pink-400">72.4%</span>
                     <span className="text-[10px] text-pink-300 font-bold">Max</span>
                   </div>
-                  <span className="text-[8px] font-semibold text-slate-500 mt-0.5 block">EMBRYOLOGY CERTIFIED</span>
+                  <span className="text-[8px] font-semibold text-white/50 mt-0.5 block">EMBRYOLOGY CERTIFIED</span>
                 </div>
                 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col justify-between shadow-inner">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Laser Recovery</span>
+                  <span className="text-[9px] text-white/70 font-bold uppercase tracking-wider block">Laser Recovery</span>
                   <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-xl font-extrabold text-blue-400">Same-Day</span>
+                    <span className="text-xl font-extrabold text-cyan-300">Same-Day</span>
                   </div>
-                  <span className="text-[8px] font-semibold text-slate-500 mt-0.5 block">SUTURELESS / NO CUT</span>
+                  <span className="text-[8px] font-semibold text-white/50 mt-0.5 block">SUTURELESS / NO CUT</span>
                 </div>
               </div>
 
               {/* Bottom Specs Badge Strip */}
               <div className="flex gap-2 justify-between border-t border-white/5 pt-4 translate-z-10">
-                <span className="bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-bold text-indigo-400 rounded-lg px-2 py-1 uppercase tracking-wider select-none">UROLOGY ACTIVE</span>
-                <span className="bg-purple-500/10 border border-purple-500/20 text-[9px] font-bold text-purple-400 rounded-lg px-2 py-1 uppercase tracking-wider select-none">IVF LAB SECURE</span>
-                <span className="bg-teal-500/10 border border-teal-500/20 text-[9px] font-bold text-teal-400 rounded-lg px-2 py-1 uppercase tracking-wider select-none">LASER ENGAGED</span>
+                <span className="bg-white/10 border border-white/15 text-[9px] font-bold text-white rounded-lg px-2 py-1 uppercase tracking-wider select-none">UROLOGY ACTIVE</span>
+                <span className="bg-white/10 border border-white/15 text-[9px] font-bold text-white rounded-lg px-2 py-1 uppercase tracking-wider select-none">IVF LAB SECURE</span>
+                <span className="bg-white/10 border border-white/15 text-[9px] font-bold text-white rounded-lg px-2 py-1 uppercase tracking-wider select-none">LASER ENGAGED</span>
               </div>
             </div>
 
             {/* Overlapping Floating Mini 3D Glass Cards */}
             {/* Card 1: Holmium Laser */}
-            <div className="absolute -top-6 -left-8 bg-[#0c1524]/85 backdrop-blur-md rounded-2xl p-3.5 shadow-[0_15px_30px_rgba(0,0,0,0.4),_0_0_15px_rgba(59,130,246,0.1)] border border-white/10 max-w-[170px] animate-float z-10 select-none pointer-events-none" style={{ animationDelay: '0s' }}>
+            <div className="absolute -top-6 -left-8 floating-glass-card rounded-2xl p-3.5 max-w-[170px] z-10 select-none pointer-events-none" style={{ animationDelay: '0s' }}>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center shrink-0 border border-blue-500/30">
-                  <span className="text-blue-400 font-extrabold text-[10px]">LASER</span>
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 border border-blue-200">
+                  <span className="text-blue-600 font-extrabold text-[10px]">LASER</span>
                 </div>
                 <div>
-                  <h4 className="text-[11px] font-bold text-white leading-tight">Holmium Laser</h4>
-                  <p className="text-[9px] text-slate-400 font-medium mt-0.5">Kidney Stone Removal</p>
+                  <h4 className="text-[11px] font-bold text-slate-800 leading-tight">Holmium Laser</h4>
+                  <p className="text-[9px] text-slate-500 font-medium mt-0.5">Kidney Stone Removal</p>
                 </div>
               </div>
             </div>
 
             {/* Card 2: IVF Cleanroom */}
-            <div className="absolute -bottom-6 -right-6 bg-[#0c1524]/85 backdrop-blur-md rounded-2xl p-3.5 shadow-[0_15px_30px_rgba(0,0,0,0.4),_0_0_15px_rgba(236,72,153,0.1)] border border-white/10 max-w-[170px] animate-float z-10 select-none pointer-events-none" style={{ animationDelay: '1.2s' }}>
+            <div className="absolute -bottom-6 -right-6 floating-glass-card rounded-2xl p-3.5 max-w-[170px] z-10 select-none pointer-events-none" style={{ animationDelay: '1.2s' }}>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-pink-500/15 flex items-center justify-center shrink-0 border border-pink-500/30">
-                  <span className="text-pink-400 font-extrabold text-[10px]">IVF</span>
+                <div className="w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center shrink-0 border border-pink-200">
+                  <span className="text-pink-600 font-extrabold text-[10px]">IVF</span>
                 </div>
                 <div>
-                  <h4 className="text-[11px] font-bold text-white leading-tight">IVF Cleanroom</h4>
-                  <p className="text-[9px] text-slate-400 font-medium mt-0.5">Advanced Embryology</p>
+                  <h4 className="text-[11px] font-bold text-slate-800 leading-tight">IVF Cleanroom</h4>
+                  <p className="text-[9px] text-slate-500 font-medium mt-0.5">Advanced Embryology</p>
                 </div>
               </div>
             </div>
 
             {/* Card 3: Robotic Surgery */}
-            <div className="absolute top-1/2 -right-12 bg-[#0c1524]/85 backdrop-blur-md rounded-2xl p-3.5 shadow-[0_15px_30px_rgba(0,0,0,0.4),_0_0_15px_rgba(16,185,129,0.1)] border border-white/10 max-w-[170px] animate-float z-10 select-none pointer-events-none" style={{ animationDelay: '2.4s' }}>
+            <div className="absolute top-1/2 -right-12 floating-glass-card rounded-2xl p-3.5 max-w-[170px] z-10 select-none pointer-events-none" style={{ animationDelay: '2.4s' }}>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center shrink-0 border border-emerald-500/30">
-                  <span className="text-emerald-400 font-extrabold text-[10px]">ROBOT</span>
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0 border border-emerald-200">
+                  <span className="text-emerald-600 font-extrabold text-[10px]">ROBOT</span>
                 </div>
                 <div>
-                  <h4 className="text-[11px] font-bold text-white leading-tight">Robotic Surgery</h4>
-                  <p className="text-[9px] text-slate-400 font-medium mt-0.5">Minimal Blood Loss</p>
+                  <h4 className="text-[11px] font-bold text-slate-800 leading-tight">Robotic Surgery</h4>
+                  <p className="text-[9px] text-slate-500 font-medium mt-0.5">Minimal Blood Loss</p>
                 </div>
               </div>
             </div>

@@ -152,21 +152,90 @@ body {
 .ecg-path {
   stroke-dasharray: 400;
   stroke-dashoffset: 800;
-  animation: ecg-dash 3.5s linear infinite;
+  animation: ecg-dash 3s linear infinite;
+  stroke: #7EF9FF;
+  filter: drop-shadow(0 0 15px #5CEEFF);
 }
 
 @keyframes card-breath {
   0%, 100% {
-    transform: translateY(0px) rotateY(6deg) rotateX(6deg);
+    transform: translateY(0px) rotateY(4deg) rotateX(4deg);
   }
   50% {
-    transform: translateY(-10px) rotateY(4deg) rotateX(4deg);
+    transform: translateY(-8px) rotateY(2deg) rotateX(2deg);
   }
 }
 
 .animate-breath {
   transform-style: preserve-3d;
   animation: card-breath 6s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shine {
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.25) 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: shine 4s infinite linear;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 35px 80px rgba(33,72,255,.35), 0 15px 30px rgba(0,0,0,.18), inset 0 1px 1px rgba(255,255,255,.25);
+  }
+  50% {
+    box-shadow: 0 35px 95px rgba(33,72,255,.50), 0 15px 30px rgba(0,0,0,.18), inset 0 1px 1px rgba(255,255,255,.35);
+  }
+}
+
+.premium-dashboard-card {
+  border-radius: 36px;
+  background: linear-gradient(135deg, #2E5BFF 0%, #254BFF 35%, #3F35F5 70%, #5A3DFF 100%);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  animation: glow-pulse 4s ease-in-out infinite;
+  transition: transform 400ms ease, box-shadow 400ms ease;
+  transform-style: preserve-3d;
+}
+
+.premium-dashboard-card:hover {
+  transform: translateY(-10px) scale(1.03) rotateY(1deg) rotateX(1deg) !important;
+}
+
+.floating-glass-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  animation: float 6s ease-in-out infinite;
+  transition: transform 400ms ease, box-shadow 400ms ease;
+}
+
+.floating-glass-card:hover {
+  transform: translateY(-10px) scale(1.05) !important;
+}
+
+.heart-icon-button {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 300ms ease;
+}
+
+.heart-icon-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
 }
 
 .translate-z-10 {
