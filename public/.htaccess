@@ -1,0 +1,23 @@
+# Apache Configuration for Vite / React Single Page Application (SPA)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Serve existing files or directories directly
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Rewrite all other requests to index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Ensure correct MIME types for JavaScript modules and CSS
+<IfModule mod_mime.c>
+  AddType application/javascript .js
+  AddType application/javascript .mjs
+  AddType text/css .css
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes

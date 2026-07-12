@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: './', // Ensures relative asset paths so the build works in subdirectories or root domains on Hostinger
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
