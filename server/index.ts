@@ -19,15 +19,16 @@ app.set('trust proxy', 1);
 
 /* ─── Middleware ─────────────────────────────────────────────────────────── */
 
-// Configure CORS for local development and Hostinger production domains
+// Configure CORS for local development, Netlify, and Hostinger production domains
 const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
+  'https://statuesque-eclair-eb19fd.netlify.app',
   process.env.FRONTEND_URL,
 ].filter(Boolean) as string[];
 
-app.use(cors({
-  origin: (origin, callback) => {
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     // Allow requests with no origin (like mobile apps, curl, or server-to-server)
     if (!origin) return callback(null, true);
     
@@ -43,14 +44,21 @@ app.use(cors({
     }
   },
   credentials: true,
-}));
+};
 
+app.use(cors(corsOptions));
 app.use(express.json());
 
 /* ─── API Routes ────────────────────────────────────────────────────────── */
 
+// Handle preflight OPTIONS requests globally across all routes
+app.options('*', cors(corsOptions));
+
+// Mount routers on both prefixed and non-prefixed paths for client consistency
 app.use('/api/appointments', appointmentsRouter);
+app.use('/appointments',     appointmentsRouter);
 app.use('/api/contacts',     contactsRouter);
+app.use('/contacts',         contactsRouter);
 
 /* ─── Health check ──────────────────────────────────────────────────────── */
 
