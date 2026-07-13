@@ -24,15 +24,27 @@ let transporter: Transporter | null = null;
 
 function getTransporter(): Transporter {
   if (!transporter) {
+    const host = process.env.SMTP_HOST;
+    const port = Number(process.env.SMTP_PORT) || 587;
+    const secure = port === 465;
+
+    console.log(`[Email] Instantiating Nodemailer transporter (Host: ${host}, Port: ${port}, Secure: ${secure})`);
+
     transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: Number(process.env.SMTP_PORT) === 465,
+      host,
+      port,
+      secure,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-    });
+      // Timeout configs to prevent blocking
+      connectionTimeout: 5000, // 5s
+      greetingTimeout: 5000,   // 5s
+      socketTimeout: 10000,    // 10s
+      // Force IPv4 to bypass Render's IPv6 resolution routing issue (ENETUNREACH)
+      family: 4,
+    } as any);
   }
   return transporter;
 }
@@ -40,13 +52,28 @@ function getTransporter(): Transporter {
 /* ─── Verify ────────────────────────────────────────────────────────────── */
 
 export async function verifySMTP(): Promise<boolean> {
+  const startTime = Date.now();
+  const host = process.env.SMTP_HOST;
+  const port = Number(process.env.SMTP_PORT) || 587;
+  const secure = port === 465;
+
   try {
     await getTransporter().verify();
-    console.log('[Email] SMTP connection verified successfully');
+    const elapsed = Date.now() - startTime;
+    console.log(`[Email] SMTP connection verified successfully in ${elapsed}ms`);
     return true;
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.warn('[Email] SMTP verification failed — emails will not be sent:', message);
+    const elapsed = Date.now() - startTime;
+    const error = err as any;
+    console.error(`[Email] SMTP verification failed after ${elapsed}ms:`, {
+      host,
+      port,
+      secure,
+      code: error.code,
+      command: error.command,
+      message: error.message,
+      stack: error.stack,
+    });
     transporter = null;
     return false;
   }
@@ -103,6 +130,10 @@ export async function sendAppointmentNotification(
   }
 
   const html = buildAppointmentHtml(data);
+  const startTime = Date.now();
+  const host = process.env.SMTP_HOST;
+  const port = Number(process.env.SMTP_PORT) || 587;
+  const secure = port === 465;
 
   try {
     await getTransporter().sendMail({
@@ -112,11 +143,23 @@ export async function sendAppointmentNotification(
       html,
       replyTo: data.email || undefined,
     });
-    console.log(`[Email] Appointment notification sent to ${to} for patient ${data.patientName}`);
+    const elapsed = Date.now() - startTime;
+    console.log(`[Email] Appointment notification sent to ${to} for patient ${data.patientName} in ${elapsed}ms`);
     return true;
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error('[Email] Failed to send appointment notification:', message);
+    const elapsed = Date.now() - startTime;
+    const error = err as any;
+    console.error(`[Email] Failed to send appointment notification after ${elapsed}ms:`, {
+      host,
+      port,
+      secure,
+      recipient: to,
+      patientName: data.patientName,
+      code: error.code,
+      command: error.command,
+      message: error.message,
+      stack: error.stack,
+    });
     return false;
   }
 }

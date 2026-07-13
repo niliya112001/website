@@ -93,22 +93,27 @@ router.post('/', async (req: Request, res: Response) => {
     const { rows } = await pool.query(sql, params);
     const appointment = rows[0];
 
-    sendAppointmentNotification({
-      patientName: appointment.patientName,
-      phone: appointment.phone,
-      email: appointment.email,
-      age: appointment.age,
-      gender: appointment.gender,
-      department: appointment.department,
-      doctor: appointment.doctor,
-      date: appointment.date,
-      timeSlot: appointment.timeSlot,
-      reason: appointment.reason,
-      message: appointment.message,
-      createdAt: appointment.createdAt,
-    }).catch((err) => {
-      console.error('[API] Email notification failed (appointment saved):', err);
-    });
+    // Dispatch email notification asynchronously, ensuring it cannot block or fail the HTTP response
+    try {
+      sendAppointmentNotification({
+        patientName: appointment.patientName,
+        phone: appointment.phone,
+        email: appointment.email,
+        age: appointment.age,
+        gender: appointment.gender,
+        department: appointment.department,
+        doctor: appointment.doctor,
+        date: appointment.date,
+        timeSlot: appointment.timeSlot,
+        reason: appointment.reason,
+        message: appointment.message,
+        createdAt: appointment.createdAt,
+      }).catch((err) => {
+        console.error('[API] Async email notification promise rejection (appointment saved):', err);
+      });
+    } catch (emailErr) {
+      console.error('[API] Sync email notification dispatch failed (appointment saved):', emailErr);
+    }
 
     return res.status(201).json({ ok: true, appointment });
   } catch (err) {
