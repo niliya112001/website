@@ -1,5 +1,4 @@
-import nodemailer from 'nodemailer';
-import type { Transporter } from 'nodemailer';
+import { BrevoClient, BrevoError } from '@getbrevo/brevo';
 
 /* ─── Types ─────────────────────────────────────────────────────────────── */
 
@@ -18,68 +17,64 @@ export interface AppointmentEmailData {
   createdAt: string;
 }
 
-/* ─── Transporter ───────────────────────────────────────────────────────── */
+/* ─── Brevo Client Initialization ───────────────────────────────────────── */
 
-let transporter: Transporter | null = null;
+let brevoClient: BrevoClient | null = null;
 
-function getTransporter(): Transporter {
-  if (!transporter) {
-    const host = process.env.SMTP_HOST;
-    const port = Number(process.env.SMTP_PORT) || 587;
-    const secure = port === 465;
-
-    console.log(`[Email] Instantiating Nodemailer transporter (Host: ${host}, Port: ${port}, Secure: ${secure})`);
-
-    transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-      // Timeout configs to prevent blocking
-      connectionTimeout: 5000, // 5s
-      greetingTimeout: 5000,   // 5s
-      socketTimeout: 10000,    // 10s
-      // Force IPv4 to bypass Render's IPv6 resolution routing issue (ENETUNREACH)
-      family: 4,
-    } as any);
+function getBrevoClient(): BrevoClient {
+  if (!brevoClient) {
+    const apiKey = process.env.BREVO_API_KEY;
+    if (!apiKey) {
+      throw new Error('BREVO_API_KEY is not set');
+    }
+    console.log('[Email] Initializing Brevo Transactional Email Client');
+    brevoClient = new BrevoClient({
+      apiKey,
+      timeoutInSeconds: 10, // Timeout of 10s for API resilience
+      maxRetries: 2,        // Retry up to 2 times for transient errors
+    });
   }
-  return transporter;
+  return brevoClient;
 }
 
-/* ─── Verify ────────────────────────────────────────────────────────────── */
+/* ─── Verify on boot (Matches server/index.ts call) ──────────────────────── */
 
 export async function verifySMTP(): Promise<boolean> {
-  const startTime = Date.now();
-  const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT) || 587;
-  const secure = port === 465;
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.warn('[Email] BREVO_API_KEY is not set — Brevo client validation skipped');
+    return false;
+  }
 
+  const startTime = Date.now();
   try {
-    await getTransporter().verify();
+    console.log('[Email] Verifying Brevo API key by fetching account info...');
+    const client = getBrevoClient();
+    const accountInfo = await client.account.getAccount();
     const elapsed = Date.now() - startTime;
-    console.log(`[Email] SMTP connection verified successfully in ${elapsed}ms`);
+    console.log(`[Email] Brevo API verification succeeded in ${elapsed}ms. Org Name: ${accountInfo.companyName}`);
     return true;
   } catch (err) {
     const elapsed = Date.now() - startTime;
-    const error = err as any;
-    console.error(`[Email] SMTP verification failed after ${elapsed}ms:`, {
-      host,
-      port,
-      secure,
-      code: error.code,
-      command: error.command,
-      message: error.message,
-      stack: error.stack,
-    });
-    transporter = null;
+    if (err instanceof BrevoError) {
+      console.error(`[Email] Brevo API verification failed after ${elapsed}ms:`, {
+        statusCode: err.statusCode,
+        message: err.message,
+        body: err.body,
+        stack: err.stack,
+      });
+    } else {
+      const error = err as any;
+      console.error(`[Email] Unexpected Brevo verification error after ${elapsed}ms:`, {
+        message: error.message,
+        stack: error.stack,
+      });
+    }
     return false;
   }
 }
 
-/* ─── Send appointment notification ─────────────────────────────────────── */
+/* ─── Build HTML content ─────────────────────────────────────────────────── */
 
 function buildAppointmentHtml(data: AppointmentEmailData): string {
   const field = (label: string, value: string): string => `
@@ -120,46 +115,58 @@ function buildAppointmentHtml(data: AppointmentEmailData): string {
     </html>`;
 }
 
+/* ─── Send Appointment Notification ─────────────────────────────────────── */
+
 export async function sendAppointmentNotification(
   data: AppointmentEmailData,
 ): Promise<boolean> {
-  const to = process.env.NOTIFICATION_EMAIL;
-  if (!to) {
-    console.warn('[Email] NOTIFICATION_EMAIL not set — skipping notification');
+  const toEmail = process.env.BREVO_RECEIVER_EMAIL;
+  if (!toEmail) {
+    console.warn('[Email] BREVO_RECEIVER_EMAIL not set — skipping notification');
     return false;
   }
 
-  const html = buildAppointmentHtml(data);
+  const htmlContent = buildAppointmentHtml(data);
   const startTime = Date.now();
-  const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT) || 587;
-  const secure = port === 465;
 
   try {
-    await getTransporter().sendMail({
-      from: process.env.SMTP_USER,
-      to,
+    const client = getBrevoClient();
+    const senderEmail = process.env.BREVO_SENDER_EMAIL || 'no-reply@nilayahospital.com';
+    const senderName = process.env.BREVO_SENDER_NAME || 'Nilaya Hospital';
+
+    console.log(`[Email] Initiating Brevo API send for patient: ${data.patientName}`);
+
+    const result = await client.transactionalEmails.sendTransacEmail({
       subject: 'New Appointment Booking - Nilaya Hospital',
-      html,
-      replyTo: data.email || undefined,
+      sender: { name: senderName, email: senderEmail },
+      to: [{ email: toEmail }],
+      htmlContent,
+      replyTo: data.email ? { email: data.email, name: data.patientName } : undefined,
     });
+
     const elapsed = Date.now() - startTime;
-    console.log(`[Email] Appointment notification sent to ${to} for patient ${data.patientName} in ${elapsed}ms`);
+    console.log(`[Email] Appointment notification sent successfully in ${elapsed}ms. Recipient: ${toEmail}, MsgId: ${JSON.stringify(result)}`);
     return true;
   } catch (err) {
     const elapsed = Date.now() - startTime;
-    const error = err as any;
-    console.error(`[Email] Failed to send appointment notification after ${elapsed}ms:`, {
-      host,
-      port,
-      secure,
-      recipient: to,
-      patientName: data.patientName,
-      code: error.code,
-      command: error.command,
-      message: error.message,
-      stack: error.stack,
-    });
+    if (err instanceof BrevoError) {
+      console.error(`[Email] Failed to send appointment notification via Brevo after ${elapsed}ms:`, {
+        statusCode: err.statusCode,
+        message: err.message,
+        body: err.body,
+        recipient: toEmail,
+        patientName: data.patientName,
+        stack: err.stack,
+      });
+    } else {
+      const error = err as any;
+      console.error(`[Email] Unexpected error sending Brevo notification after ${elapsed}ms:`, {
+        message: error.message,
+        recipient: toEmail,
+        patientName: data.patientName,
+        stack: error.stack,
+      });
+    }
     return false;
   }
 }
