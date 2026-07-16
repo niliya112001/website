@@ -251,8 +251,8 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 absolute"></span>
                     <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest pl-1">Live Telemetry</span>
                   </div>
-                  <h3 className="font-extrabold text-[28px] sm:text-[32px] lg:text-[40px] leading-tight tracking-tight text-white mt-1.5">Nilaya AI</h3>
-                  <p className="text-[10px] text-white/70 font-semibold uppercase tracking-widest mt-0.5">Robotics Engine v3.1</p>
+                  <h3 className="font-extrabold text-[28px] sm:text-[32px] lg:text-[40px] leading-tight tracking-tight text-white mt-1.5">NILAYA UROSTONE
+& GYNAE-IVF HOSPITAL</h3>
                 </div>
                 
                 {/* Heart Button */}
@@ -340,10 +340,10 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
             <div className="absolute top-1/2 -right-12 floating-glass-card rounded-2xl p-3.5 max-w-[170px] z-10 select-none pointer-events-none" style={{ animationDelay: '2.4s' }}>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0 border border-emerald-200">
-                  <span className="text-emerald-600 font-extrabold text-[10px]">ROBOT</span>
+                  <span className="text-emerald-600 font-extrabold text-[10px]">URO</span>
                 </div>
                 <div>
-                  <h4 className="text-[11px] font-bold text-slate-800 leading-tight">Robotic Surgery</h4>
+                  <h4 className="text-[11px] font-bold text-slate-800 leading-tight">Advanced Urology</h4>
                   <p className="text-[9px] text-slate-500 font-medium mt-0.5">Minimal Blood Loss</p>
                 </div>
               </div>

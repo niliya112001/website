@@ -143,21 +143,27 @@ export const DEPARTMENTS: Department[] = [
     ]
   },
   {
-    id: 'diagnostics',
-    name: 'Diagnostics & Radiology',
-    description: 'Equipped with digital high-frequency X-Ray, high-resolution ultrasound, and an in-house laboratory to provide quick, reliable diagnostics.',
-    icon: 'Shield',
-    color: 'from-indigo-500 to-violet-500',
-    image: DEPARTMENT_IMAGES.diagnostics,
-    detailedServices: [
-      '3D/4D High-Resolution Obstetrical Ultrasound',
-      'Digital high-frequency X-Ray',
-      'Semen Analysis & IVF Lab diagnostics',
-      'Fully Automated Pathology Laboratory',
-      'Urodynamic studies for bladder assessment',
-      'Hysterosalpingography (HSG) for tubal testing'
-    ]
-  }
+  id: 'diagnostics',
+  name: 'IVF Diagnostics & Advanced Imaging',
+  description: 'Comprehensive fertility diagnostics with advanced imaging, reproductive hormone testing, semen analysis, and IVF laboratory support for accurate evaluation and personalized treatment planning.',
+  icon: 'Shield',
+  color: 'from-indigo-500 to-violet-500',
+  image: DEPARTMENT_IMAGES.diagnostics,
+  detailedServices: [
+    'Advanced Follicular Monitoring Ultrasound',
+    '3D/4D Pelvic & Obstetric Ultrasound',
+    'Transvaginal Ultrasound (TVS)',
+    'Semen Analysis & Sperm DNA Fragmentation Testing',
+    'Hormonal Fertility Profile (AMH, FSH, LH, TSH, Prolactin)',
+    'Ovulation Monitoring',
+    'Hysterosalpingography (HSG) for Tubal Patency',
+    'Sonosalpingography (SSG)',
+    'Embryology & IVF Laboratory Diagnostics',
+    'Preconception & Pregnancy Diagnostic Screening',
+    'Fully Automated Pathology Laboratory',
+    'Digital X-Ray (When Clinically Indicated)'
+  ]
+}
 ];
 
 export const SERVICES: MedicalService[] = [
@@ -217,14 +223,7 @@ export const SERVICES: MedicalService[] = [
     tag: 'Surgical Birth',
     image: SERVICE_IMAGES.cSection
   },
-  {
-    id: 'diagnostics-imaging',
-    title: 'Diagnostics & Imaging',
-    description: 'Fully automated pathology laboratory, digital high-frequency X-Rays, and high-resolution 3D/4D ultrasound Doppler scans.',
-    icon: 'Thermometer',
-    tag: '24 Hours',
-    image: SERVICE_IMAGES.diagnosticsImaging
-  },
+  
   {
     id: 'emergency-care',
     title: 'Emergency Care',
