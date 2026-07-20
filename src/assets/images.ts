@@ -21,7 +21,13 @@ import facilityReceptionPlaceholder from './placeholders/facility_reception_plac
 import facilityOtPlaceholder from './placeholders/facility_ot_placeholder.png';
 import equipmentDiagnosticsPlaceholder from './placeholders/equipment_diagnostics_placeholder.png';
 import equipmentIvfPlaceholder from './placeholders/equipment_ivf_placeholder.png';
-import buildingExteriorPlaceholder from './placeholders/building_exterior_placeholder.png';
+import buildingExteriorPlaceholder from './placeholders/building_exterior.jpg';
+import serviceLaserTreatments from './placeholders/service_laser_treatments.png';
+import serviceLaparoscopicSurgery from './placeholders/service_laparoscopic_surgery.png';
+import servicePregnancyCare from './placeholders/service_pregnancy_care.png';
+import serviceNormalDelivery from './placeholders/service_normal_delivery.png';
+import serviceCSection from './placeholders/service_c_section.png';
+import serviceEmergencyCare from './placeholders/service_emergency_care.png';
 
 export {
   heroBgPlaceholder,
@@ -181,21 +187,21 @@ export function getIcon(name: string): string | undefined {
 const DEPARTMENT_PLACEHOLDERS: Record<string, string> = {
   urology: facilityOtPlaceholder,
   gynaeIvf: equipmentIvfPlaceholder,
-  laparoscopy: facilityOtPlaceholder,
+  laparoscopy: serviceLaparoscopicSurgery,
   diagnostics: equipmentDiagnosticsPlaceholder,
 };
 
 const SERVICE_PLACEHOLDERS: Record<string, string> = {
   advancedUrology: facilityOtPlaceholder,
-  holmiumLaser: facilityOtPlaceholder,
-  laserTreatments: facilityOtPlaceholder,
-  laparoscopicSurgery: facilityOtPlaceholder,
+  holmiumLaser: serviceLaserTreatments,
+  laserTreatments: serviceLaserTreatments,
+  laparoscopicSurgery: serviceLaparoscopicSurgery,
   ivfFertility: equipmentIvfPlaceholder,
-  pregnancyCare: equipmentIvfPlaceholder,
-  normalDelivery: facilityReceptionPlaceholder,
-  cSection: facilityOtPlaceholder,
+  pregnancyCare: servicePregnancyCare,
+  normalDelivery: serviceNormalDelivery,
+  cSection: serviceCSection,
   diagnosticsImaging: equipmentDiagnosticsPlaceholder,
-  emergencyCare: facilityReceptionPlaceholder,
+  emergencyCare: serviceEmergencyCare,
 };
 
 const ABOUT_PLACEHOLDERS: Record<string, string> = {
