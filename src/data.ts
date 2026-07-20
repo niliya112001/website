@@ -21,9 +21,9 @@ export const HOSPITAL_INFO = {
   email: 'Receptionist112001@gmail.com',
   workingHours: '24 Hours Emergency | OPD: 10:00 AM - 6:00 PM (Mon - Sat)',
   locationCoords: {
-    lat: 25.4334,
-    lng: 86.1498,
-    embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3601.81232821217!2d86.147611!3d25.4334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDI2JzAwLjIiTiA4NsKwMDgnNTEuNCJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
+    lat: 25.41071,
+    lng: 86.16095,
+    embedUrl: 'https://maps.google.com/maps?q=Nilaya%20Urostone%20%26%20Gynae-IVF%20Hospital%2C%20NH-31%2C%20Khatopur%2C%20Begusarai%2C%20Bihar&t=&z=16&ie=UTF8&iwloc=&output=embed'
   }
 };
 
