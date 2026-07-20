@@ -133,9 +133,9 @@ export default function AboutUs({ initialTab = 'hospital' }: AboutUsProps) {
                   </div>
                 </div>
                 {/* Floating Badge */}
-                <div className="absolute -top-6 -right-4 bg-white/90 glass-panel rounded-2xl p-4 shadow-xl border border-white/50 max-w-[150px] text-center">
-                  <span className="text-2xl font-black text-blue-600 block">NABL</span>
-                  <span className="text-[9px] font-bold text-slate-500 uppercase leading-none block mt-0.5">In-house pathology standard</span>
+                <div className="absolute -top-6 -right-4 bg-white/90 glass-panel rounded-2xl p-4 shadow-xl border border-white/50 max-w-[160px] text-center">
+                  <span className="text-xl font-black text-blue-600 block">NILAYA</span>
+                  <span className="text-[9px] font-bold text-slate-500 uppercase leading-normal block mt-1">Urostone & Gynae-IVF Hospital</span>
                 </div>
               </div>
 
