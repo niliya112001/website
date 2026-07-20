@@ -157,6 +157,22 @@ body {
   filter: drop-shadow(0 0 15px #5CEEFF);
 }
 
+.urology-path {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 800;
+  animation: ecg-dash 2.5s linear infinite;
+  stroke: #22d3ee;
+  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.8));
+}
+
+.ivf-path {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 800;
+  animation: ecg-dash 4s linear infinite;
+  stroke: #f472b6;
+  filter: drop-shadow(0 0 12px rgba(244, 114, 182, 0.8));
+}
+
 @keyframes card-breath {
   0%, 100% {
     transform: translateY(0px) rotateY(4deg) rotateX(4deg);

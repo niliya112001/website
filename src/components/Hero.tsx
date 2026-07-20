@@ -11,6 +11,7 @@ interface HeroProps {
 export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
   const [stats, setStats] = useState({ years: 0, patients: 0, doctors: 0, beds: 0 });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [telemetryMode, setTelemetryMode] = useState<'urology' | 'ivf'>('urology');
 
   // Preload background slider images for smooth transitions
   useEffect(() => {
@@ -76,6 +77,14 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
       }
     }, interval);
 
+    return () => clearInterval(timer);
+  }, []);
+
+  // Telemetry auto switcher (Urology <-> IVF)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTelemetryMode((prev) => (prev === 'urology' ? 'ivf' : 'urology'));
+    }, 4500);
     return () => clearInterval(timer);
   }, []);
 
@@ -261,21 +270,45 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
                 </div>
               </div>
 
-              {/* ECG Line (Futuristic Glowing Line Drawing) */}
+              {/* Live Telemetry Panel (Urology & IVF Auto-Switcher) */}
               <div className="my-auto py-2 translate-z-20 flex flex-col justify-center">
-                <div className="flex justify-between items-center px-2 mb-2">
-                  <span className="text-[9px] font-semibold text-white/70 uppercase tracking-wider">Cardiac Telemetry</span>
-                  <span className="text-xs font-mono text-cyan-300 animate-pulse font-bold">78 BPM</span>
+                <div className="flex justify-between items-center px-2 mb-2 min-h-[16px]">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider transition-colors duration-500 ${
+                    telemetryMode === 'urology' ? 'text-cyan-300' : 'text-pink-300'
+                  }`}>
+                    {telemetryMode === 'urology' ? 'Laser Surgery Telemetry' : 'IVF Incubator Stability'}
+                  </span>
+                  <span className={`text-xs font-mono font-bold animate-pulse transition-colors duration-500 ${
+                    telemetryMode === 'urology' ? 'text-cyan-400' : 'text-pink-400'
+                  }`}>
+                    {telemetryMode === 'urology' ? 'Active - 12 Hz' : '37.0°C | Stable'}
+                  </span>
                 </div>
-                <div className="relative h-20 bg-slate-950/60 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center p-2">
-                  <svg className="w-full h-full stroke-blue-500 stroke-2 fill-none overflow-visible" viewBox="0 0 400 100">
+                <div className={`relative h-20 bg-slate-950/70 rounded-2xl border transition-all duration-700 overflow-hidden flex items-center justify-center p-2 ${
+                  telemetryMode === 'urology' 
+                    ? 'border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.15)]' 
+                    : 'border-pink-500/30 shadow-[0_0_15px_rgba(244,114,182,0.15)]'
+                }`}>
+                  <svg className="w-full h-full stroke-2 fill-none overflow-visible" viewBox="0 0 400 100">
+                    {/* Background faint guide wave */}
                     <path
-                      d="M 0 50 Q 25 50 50 50 Q 60 50 65 20 T 75 80 T 85 50 L 150 50 Q 160 50 165 10 T 175 90 T 185 50 L 250 50 Q 260 50 265 30 T 275 70 T 285 50 L 400 50"
-                      className="stroke-blue-950/40 stroke-[2px]"
+                      d={
+                        telemetryMode === 'urology'
+                          ? "M 0 50 L 40 50 L 50 15 L 60 50 L 100 50 L 110 15 L 120 50 L 160 50 L 170 15 L 180 50 L 220 50 L 230 15 L 240 50 L 280 50 L 290 15 L 300 50 L 340 50 L 350 15 L 360 50 L 400 50"
+                          : "M 0 50 C 40 25, 60 75, 100 50 C 140 25, 160 75, 200 50 C 240 25, 260 75, 300 50 C 340 25, 360 75, 400 50"
+                      }
+                      className="stroke-white/5 stroke-[1px] transition-all duration-500"
                     />
+                    {/* Foreground animated wave */}
                     <path
-                      d="M 0 50 Q 25 50 50 50 Q 60 50 65 20 T 75 80 T 85 50 L 150 50 Q 160 50 165 10 T 175 90 T 185 50 L 250 50 Q 260 50 265 30 T 275 70 T 285 50 L 400 50"
-                      className="stroke-cyan-400 stroke-[3px] ecg-path"
+                      d={
+                        telemetryMode === 'urology'
+                          ? "M 0 50 L 40 50 L 50 15 L 60 50 L 100 50 L 110 15 L 120 50 L 160 50 L 170 15 L 180 50 L 220 50 L 230 15 L 240 50 L 280 50 L 290 15 L 300 50 L 340 50 L 350 15 L 360 50 L 400 50"
+                          : "M 0 50 C 40 25, 60 75, 100 50 C 140 25, 160 75, 200 50 C 240 25, 260 75, 300 50 C 340 25, 360 75, 400 50"
+                      }
+                      className={`stroke-[3px] transition-all duration-700 ${
+                        telemetryMode === 'urology' ? 'urology-path' : 'ivf-path'
+                      }`}
                     />
                   </svg>
                 </div>
