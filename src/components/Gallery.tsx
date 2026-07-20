@@ -16,7 +16,7 @@ function SlideshowComponent({ images }: SlideshowComponentProps) {
     if (!isPlaying || images.length === 0) return;
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 3000);
+    }, 1000);
     return () => clearInterval(timer);
   }, [isPlaying, images.length]);
 
@@ -72,6 +72,28 @@ function SlideshowComponent({ images }: SlideshowComponentProps) {
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'facility' | 'equipment' | 'video'>('all');
   const [activeMedia, setActiveMedia] = useState<GalleryItem | null>(null);
+
+  // Hide Navbar & disable body scroll when media is enlarged
+  useEffect(() => {
+    const nav = document.getElementById('main-nav');
+    if (activeMedia) {
+      document.body.style.overflow = 'hidden';
+      if (nav) {
+        nav.classList.add('opacity-0', 'pointer-events-none');
+      }
+    } else {
+      document.body.style.overflow = '';
+      if (nav) {
+        nav.classList.remove('opacity-0', 'pointer-events-none');
+      }
+    }
+    return () => {
+      document.body.style.overflow = '';
+      if (nav) {
+        nav.classList.remove('opacity-0', 'pointer-events-none');
+      }
+    };
+  }, [activeMedia]);
 
   // Memoize collage images, excluding the currently active lightbox image
   const collageImages = useMemo(() => {
@@ -257,7 +279,10 @@ export default function Gallery() {
 
         {/* MEDIA LIGHTBOX / MODAL VIEWER */}
         {activeMedia && (
-          <div className="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div 
+            className="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 cursor-zoom-out"
+            onClick={() => setActiveMedia(null)}
+          >
             <button
               onClick={() => setActiveMedia(null)}
               className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/10 transition-colors cursor-pointer"
@@ -266,10 +291,22 @@ export default function Gallery() {
               <X className="w-6 h-6" />
             </button>
 
-            <div className="w-full max-w-4xl max-h-[85vh] flex flex-col items-center justify-center relative space-y-4">
+            <div 
+              className="w-full max-w-4xl max-h-[85vh] flex flex-col items-center justify-center relative space-y-4 cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            >
               
               {/* Media Block rendering */}
-              <div className="w-full aspect-[4/3] max-w-3xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+              <div className="relative w-full aspect-[4/3] max-w-3xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                {/* Floating internal close/cut button directly on the image/video card */}
+                <button
+                  onClick={() => setActiveMedia(null)}
+                  className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-slate-950/70 hover:bg-rose-600 hover:text-white text-white/90 border border-white/15 transition-all cursor-pointer hover:scale-105 shadow-md flex items-center justify-center"
+                  aria-label="Close Media"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
                 {activeMedia.url === 'slideshow' ? (
                   <SlideshowComponent images={[...HOSPITAL_FACILITY_PHOTOS, ...ADVANCED_EQUIPMENT_PHOTOS]} />
                 ) : activeMedia.type === 'image' ? (
