@@ -8,6 +8,144 @@ interface HeroProps {
   onNavigate: (sectionId: string) => void;
 }
 
+interface DnaHelixProps {
+  color1?: string;
+  color2?: string;
+  isActive: boolean;
+}
+
+function DnaHelixComponent({ color1 = '#f472b6', color2 = '#fda4af', isActive }: DnaHelixProps) {
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    if (!isActive) return;
+    let animationFrameId: number;
+    const update = () => {
+      setPhase((prev) => (prev + 0.04) % (Math.PI * 2));
+      animationFrameId = requestAnimationFrame(update);
+    };
+    animationFrameId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isActive]);
+
+  const numPoints = 15;
+  const rungs = [];
+
+  for (let i = 0; i < numPoints; i++) {
+    const x = 25 + (i * 350) / (numPoints - 1);
+    const angle = (i * Math.PI * 2) / 6.5 + phase;
+    const sinVal = Math.sin(angle);
+    const cosVal = Math.cos(angle);
+
+    const amplitude = 22;
+    const y1 = 50 + amplitude * sinVal;
+    const y2 = 50 - amplitude * sinVal;
+
+    const z1 = cosVal;
+    const z2 = -cosVal;
+
+    rungs.push({ x, y1, y2, z1, z2 });
+  }
+
+  // Construct backbone paths
+  let path1 = '';
+  let path2 = '';
+  for (let i = 0; i < numPoints; i++) {
+    const rung = rungs[i];
+    if (i === 0) {
+      path1 += `M ${rung.x} ${rung.y1}`;
+      path2 += `M ${rung.x} ${rung.y2}`;
+    } else {
+      path1 += ` L ${rung.x} ${rung.y1}`;
+      path2 += ` L ${rung.x} ${rung.y2}`;
+    }
+  }
+
+  return (
+    <svg className="w-full h-full overflow-visible" viewBox="0 0 400 100">
+      {/* Rungs (base pairs) */}
+      {rungs.map((rung, idx) => {
+        const avgZ = (rung.z1 + rung.z2) / 2;
+        return (
+          <line
+            key={`rung-${idx}`}
+            x1={rung.x}
+            y1={rung.y1}
+            x2={rung.x}
+            y2={rung.y2}
+            stroke="white"
+            strokeWidth="1.5"
+            opacity={0.12 + 0.18 * (1 + avgZ)}
+          />
+        );
+      })}
+
+      {/* Backbone Strand 1 */}
+      <path
+        d={path1}
+        stroke={color1}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.8"
+        style={{
+          filter: `drop-shadow(0 0 6px ${color1})`
+        }}
+      />
+      {/* Backbone Strand 2 */}
+      <path
+        d={path2}
+        stroke={color2}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.8"
+        style={{
+          filter: `drop-shadow(0 0 6px ${color2})`
+        }}
+      />
+
+      {/* Strand 1 nodes */}
+      {rungs.map((rung, idx) => {
+        const radius = 3 + 2.5 * (rung.z1 + 1); // 1 to 6
+        const opacity = 0.35 + 0.65 * (rung.z1 + 1) / 2;
+        return (
+          <circle
+            key={`s1-${idx}`}
+            cx={rung.x}
+            cy={rung.y1}
+            r={radius}
+            fill={color1}
+            opacity={opacity}
+            style={{
+              filter: `drop-shadow(0 0 ${1.5 + 1.5 * (rung.z1 + 1)}px ${color1})`
+            }}
+          />
+        );
+      })}
+
+      {/* Strand 2 nodes */}
+      {rungs.map((rung, idx) => {
+        const radius = 3 + 2.5 * (rung.z2 + 1);
+        const opacity = 0.35 + 0.65 * (rung.z2 + 1) / 2;
+        return (
+          <circle
+            key={`s2-${idx}`}
+            cx={rung.x}
+            cy={rung.y2}
+            r={radius}
+            fill={color2}
+            opacity={opacity}
+            style={{
+              filter: `drop-shadow(0 0 ${1.5 + 1.5 * (rung.z2 + 1)}px ${color2})`
+            }}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
   const [stats, setStats] = useState({ years: 0, patients: 0, doctors: 0, beds: 0 });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -284,33 +422,27 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
                     {telemetryMode === 'urology' ? 'Active - 12 Hz' : '37.0°C | Stable'}
                   </span>
                 </div>
-                <div className={`relative h-20 bg-slate-950/70 rounded-2xl border transition-all duration-700 overflow-hidden flex items-center justify-center p-2 ${
+                <div className={`relative w-full h-20 bg-slate-950/70 rounded-2xl border transition-all duration-700 overflow-hidden flex items-center justify-center p-2 ${
                   telemetryMode === 'urology' 
                     ? 'border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.15)]' 
                     : 'border-pink-500/30 shadow-[0_0_15px_rgba(244,114,182,0.15)]'
                 }`}>
-                  <svg className="w-full h-full stroke-2 fill-none overflow-visible" viewBox="0 0 400 100">
-                    {/* Background faint guide wave */}
-                    <path
-                      d={
-                        telemetryMode === 'urology'
-                          ? "M 0 50 L 40 50 L 50 15 L 60 50 L 100 50 L 110 15 L 120 50 L 160 50 L 170 15 L 180 50 L 220 50 L 230 15 L 240 50 L 280 50 L 290 15 L 300 50 L 340 50 L 350 15 L 360 50 L 400 50"
-                          : "M 0 50 C 40 25, 60 75, 100 50 C 140 25, 160 75, 200 50 C 240 25, 260 75, 300 50 C 340 25, 360 75, 400 50"
-                      }
-                      className="stroke-white/5 stroke-[1px] transition-all duration-500"
-                    />
-                    {/* Foreground animated wave */}
-                    <path
-                      d={
-                        telemetryMode === 'urology'
-                          ? "M 0 50 L 40 50 L 50 15 L 60 50 L 100 50 L 110 15 L 120 50 L 160 50 L 170 15 L 180 50 L 220 50 L 230 15 L 240 50 L 280 50 L 290 15 L 300 50 L 340 50 L 350 15 L 360 50 L 400 50"
-                          : "M 0 50 C 40 25, 60 75, 100 50 C 140 25, 160 75, 200 50 C 240 25, 260 75, 300 50 C 340 25, 360 75, 400 50"
-                      }
-                      className={`stroke-[3px] transition-all duration-700 ${
-                        telemetryMode === 'urology' ? 'urology-path' : 'ivf-path'
-                      }`}
-                    />
-                  </svg>
+                  {telemetryMode === 'urology' ? (
+                    <svg className="w-full h-full stroke-2 fill-none overflow-visible" viewBox="0 0 400 100">
+                      {/* Background faint guide wave */}
+                      <path
+                        d="M 0 50 L 40 50 L 50 15 L 60 50 L 100 50 L 110 15 L 120 50 L 160 50 L 170 15 L 180 50 L 220 50 L 230 15 L 240 50 L 280 50 L 290 15 L 300 50 L 340 50 L 350 15 L 360 50 L 400 50"
+                        className="stroke-white/5 stroke-[1px] transition-all duration-500"
+                      />
+                      {/* Foreground animated wave */}
+                      <path
+                        d="M 0 50 L 40 50 L 50 15 L 60 50 L 100 50 L 110 15 L 120 50 L 160 50 L 170 15 L 180 50 L 220 50 L 230 15 L 240 50 L 280 50 L 290 15 L 300 50 L 340 50 L 350 15 L 360 50 L 400 50"
+                        className="stroke-[3px] urology-path transition-all duration-700"
+                      />
+                    </svg>
+                  ) : (
+                    <DnaHelixComponent isActive={telemetryMode === 'ivf'} color1="#f472b6" color2="#fda4af" />
+                  )}
                 </div>
               </div>
 
