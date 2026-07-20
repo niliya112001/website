@@ -253,25 +253,25 @@ function buildGalleryItems(): GalleryItem[] {
       .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
-  // 1. Hospital Facility images
+  // 1. Hospital Facility images mapped to equipment category
   HOSPITAL_FACILITY_PHOTOS.forEach((url, idx) => {
-    const rawName = HOSPITAL_FACILITY_FILENAMES[idx] ?? `facility-${idx + 1}`;
+    const rawName = HOSPITAL_FACILITY_FILENAMES[idx] ?? `equipment-${idx + 1}`;
     items.push({
-      id: `facility-${idx}`,
+      id: `equipment-${idx}`,
       title: formatTitle(rawName),
-      category: 'facility',
+      category: 'equipment',
       type: 'image',
       url,
     });
   });
 
-  // 2. Advanced Equipment images
+  // 2. Advanced Equipment images mapped to facility category
   ADVANCED_EQUIPMENT_PHOTOS.forEach((url, idx) => {
-    const rawName = ADVANCED_EQUIPMENT_FILENAMES[idx] ?? `equipment-${idx + 1}`;
+    const rawName = ADVANCED_EQUIPMENT_FILENAMES[idx] ?? `facility-${idx + 1}`;
     items.push({
-      id: `equipment-${idx}`,
+      id: `facility-${idx}`,
       title: formatTitle(rawName),
-      category: 'equipment',
+      category: 'facility',
       type: 'image',
       url,
     });
