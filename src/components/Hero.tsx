@@ -59,7 +59,7 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
     const interval = 30;
     const steps = duration / interval;
 
-    const targets = { years: 15, patients: 50, doctors: 20, beds: 100 };
+    const targets = { years: 1, patients: 5, doctors: 2, beds: 20 };
     let currentStep = 0;
 
     const timer = setInterval(() => {
@@ -356,7 +356,7 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
         <div className="mt-10 glass-panel bg-white/60 rounded-3xl p-6 sm:p-8 border border-white/50 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-200/60">
           <div className="text-center p-2">
             <span className="text-3xl sm:text-4xl font-extrabold text-blue-600 block">{stats.years}+</span>
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Years of Trust</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Year of Trust</span>
           </div>
           <div className="text-center p-2 pt-6 md:pt-2">
             <span className="text-3xl sm:text-4xl font-extrabold text-blue-600 block">{stats.patients}K+</span>
@@ -364,7 +364,7 @@ export default function Hero({ onOpenAppointment, onNavigate }: HeroProps) {
           </div>
           <div className="text-center p-2 pt-6 md:pt-2">
             <span className="text-3xl sm:text-4xl font-extrabold text-blue-600 block">{stats.doctors}+</span>
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Senior Specialists</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Specialists</span>
           </div>
           <div className="text-center p-2 pt-6 md:pt-2">
             <span className="text-3xl sm:text-4xl font-extrabold text-blue-600 block">{stats.beds}+</span>

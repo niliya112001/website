@@ -160,7 +160,7 @@ export const DEPARTMENTS: Department[] = [
     'Sonosalpingography (SSG)',
     'Embryology & IVF Laboratory Diagnostics',
     'Preconception & Pregnancy Diagnostic Screening',
-    'Fully Automated Pathology Laboratory',
+    'Fully Automated ology Laboratory',
     'Digital X-Ray (When Clinically Indicated)'
   ]
 }
