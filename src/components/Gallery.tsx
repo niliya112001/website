@@ -1,8 +1,73 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { GALLERY } from '../data';
 import { GalleryItem } from '../types';
-import { Play, Image as ImageIcon, Video as VideoIcon, X, Eye, Film, Layers } from 'lucide-react';
+import { Play, Image as ImageIcon, Video as VideoIcon, X, Eye, Film, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HOSPITAL_FACILITY_PHOTOS, ADVANCED_EQUIPMENT_PHOTOS } from '../assets/images';
+
+interface SlideshowComponentProps {
+  images: string[];
+}
+
+function SlideshowComponent({ images }: SlideshowComponentProps) {
+  const [index, setIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  useEffect(() => {
+    if (!isPlaying || images.length === 0) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [isPlaying, images.length]);
+
+  if (images.length === 0) return null;
+
+  return (
+    <div className="relative w-full h-full flex items-center justify-center bg-black">
+      {/* Active Image */}
+      <img
+        src={images[index]}
+        alt={`Slideshow image ${index + 1}`}
+        className="w-full h-full object-contain transition-opacity duration-500"
+      />
+
+      {/* Prev/Next Buttons */}
+      <button
+        onClick={() => setIndex((prev) => (prev - 1 + images.length) % images.length)}
+        className="absolute left-4 p-2.5 rounded-full bg-black/40 hover:bg-black/75 border border-white/10 text-white cursor-pointer transition-colors z-10"
+        aria-label="Previous image"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+
+      <button
+        onClick={() => setIndex((prev) => (prev + 1) % images.length)}
+        className="absolute right-4 p-2.5 rounded-full bg-black/40 hover:bg-black/75 border border-white/10 text-white cursor-pointer transition-colors z-10"
+        aria-label="Next image"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Control Strip (Play/Pause, Indicator dot) */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/55 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 z-10">
+        <button
+          onClick={() => setIsPlaying(!isPlaying)}
+          className="text-white hover:text-blue-400 transition-colors cursor-pointer"
+        >
+          {isPlaying ? (
+            <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><rect x="4" y="4" width="4" height="16"/><rect x="16" y="4" width="4" height="16"/></svg>
+          ) : (
+            <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          )}
+        </button>
+
+        <span className="text-xs font-mono font-bold text-white select-none">
+          {index + 1} / {images.length}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'facility' | 'equipment' | 'video'>('all');
@@ -205,7 +270,9 @@ export default function Gallery() {
               
               {/* Media Block rendering */}
               <div className="w-full aspect-[4/3] max-w-3xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black">
-                {activeMedia.type === 'image' ? (
+                {activeMedia.url === 'slideshow' ? (
+                  <SlideshowComponent images={[...HOSPITAL_FACILITY_PHOTOS, ...ADVANCED_EQUIPMENT_PHOTOS]} />
+                ) : activeMedia.type === 'image' ? (
                   <img
                     src={activeMedia.url}
                     alt={activeMedia.title}

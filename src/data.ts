@@ -290,6 +290,19 @@ function buildGalleryItems(): GalleryItem[] {
     });
   });
 
+  // 4. Custom interactive slideshow item of all images
+  const allImages = [...HOSPITAL_FACILITY_PHOTOS, ...ADVANCED_EQUIPMENT_PHOTOS];
+  if (allImages.length > 0) {
+    items.push({
+      id: 'slideshow-tour',
+      title: 'Interactive Photo Slideshow (All Images)',
+      category: 'video',
+      type: 'video',
+      url: 'slideshow',
+      thumbnail: allImages[0],
+    });
+  }
+
   return items;
 }
 
